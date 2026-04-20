@@ -5,7 +5,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileControlller;
 use App\Http\Controllers\WargaController;
+use App\Http\Controllers\Admin\JadwalKegiatanController;
 use App\Http\Controllers\Admin\KeluhanController;
+use App\Http\Controllers\Admin\PengumumanController;
+
 
 Route::get('/', fn() => redirect()->route('login'));
 
@@ -49,6 +52,23 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('keluhan/{keluhan}',    [KeluhanController::class, 'show'])  ->name('keluhan.show');
     Route::put('keluhan/{keluhan}',    [KeluhanController::class, 'update'])->name('keluhan.update');
     Route::post('keluhan/{keluhan}/pesan', [KeluhanController::class, 'kirimPesan'])->name('keluhan.pesan');
+
+   // ── Admin Surat ────────────────────────────────────────────
+    Route::get('surat',                   [App\Http\Controllers\Admin\PermohonanSuratController::class, 'index']) ->name('surat.index');
+    Route::get('surat/{permohonanSurat}', [App\Http\Controllers\Admin\PermohonanSuratController::class, 'show'])  ->name('surat.show');
+    Route::put('surat/{permohonanSurat}', [App\Http\Controllers\Admin\PermohonanSuratController::class, 'update'])->name('surat.update');
+
+    Route::get('/jadwal', [JadwalKegiatanController::class, 'index'])->name('jadwal.index');
+    Route::get('/jadwal/ambil', [JadwalKegiatanController::class, 'ambilJadwal'])->name('jadwal.ambil');
+    Route::post('/jadwal', [JadwalKegiatanController::class, 'store'])->name('jadwal.store');
+    Route::put('/jadwal/{jadwal}', [JadwalKegiatanController::class, 'update'])->name('jadwal.update');
+    Route::delete('/jadwal/{jadwal}', [JadwalKegiatanController::class, 'destroy'])->name('jadwal.destroy');
+
+    Route::get('/pengumuman', [PengumumanController::class, 'index'])->name('pengumuman.index');
+    Route::post('/pengumuman', [PengumumanController::class, 'store'])->name('pengumuman.store');
+    Route::put('/pengumuman/{pengumuman}', [PengumumanController::class, 'update'])->name('pengumuman.update');
+    Route::delete('/pengumuman/{pengumuman}', [PengumumanController::class, 'destroy'])->name('pengumuman.destroy');
+
     
 });
 
@@ -61,6 +81,14 @@ Route::middleware(['auth', 'role:warga'])->prefix('warga')->name('warga.')->grou
     Route::post('keluhan',             [App\Http\Controllers\Warga\KeluhanController::class, 'store']) ->name('keluhan.store');
     Route::get('keluhan/{keluhan}',    [App\Http\Controllers\Warga\KeluhanController::class, 'show'])  ->name('keluhan.show');
     Route::post('keluhan/{keluhan}/pesan', [App\Http\Controllers\Warga\KeluhanController::class, 'kirimPesan'])->name('keluhan.pesan');
+
+   // ── Warga Surat ────────────────────────────────────────────
+    Route::get('surat',                   [App\Http\Controllers\Warga\PermohonanSuratController::class, 'index']) ->name('surat.index');
+    Route::get('surat/create',            [App\Http\Controllers\Warga\PermohonanSuratController::class, 'create'])->name('surat.create');
+    Route::post('surat',                  [App\Http\Controllers\Warga\PermohonanSuratController::class, 'store']) ->name('surat.store');
+    Route::get('surat/{permohonanSurat}', [App\Http\Controllers\Warga\PermohonanSuratController::class, 'show'])  ->name('surat.show');
+
+
 });
 Route::middleware('auth')->group(function () {
     Route::get('/profile',          [ProfileControlller::class, 'show'])->name('profile');

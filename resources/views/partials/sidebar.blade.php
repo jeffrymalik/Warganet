@@ -169,20 +169,15 @@
                 @if (auth()->user()->role === 'admin')
                   {{-- Admin: lihat semua keluhan --}}
                   <li>
-                    <a href="#" class="menu-dropdown-item group" :class="page === 'keluhanList' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                    <a href="{{route('admin.keluhan.index')}}" class="menu-dropdown-item group" :class="page === 'keluhanList' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
                       Semua Keluhan
                     </a>
                   </li>
                 @else
                   {{-- Warga: hanya keluhan milik sendiri --}}
                   <li>
-                    <a href="#" class="menu-dropdown-item group" :class="page === 'keluhanSaya' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                    <a href="{{route('warga.keluhan.index')}}" class="menu-dropdown-item group" :class="page === 'keluhanSaya' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
                       Keluhan Saya
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="menu-dropdown-item group" :class="page === 'keluhanBuat' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
-                      Buat Keluhan
                     </a>
                   </li>
                 @endif
@@ -226,20 +221,15 @@
                 @if (auth()->user()->role === 'admin')
                   {{-- Admin: kelola semua permohonan surat --}}
                   <li>
-                    <a href="#" class="menu-dropdown-item group" :class="page === 'suratKelola' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                    <a href="{{route('admin.surat.index')}}" class="menu-dropdown-item group" :class="page === 'suratKelola' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
                       Kelola Permohonan
                     </a>
                   </li>
                 @else
                   {{-- Warga: ajukan & lihat status surat --}}
                   <li>
-                    <a href="#" class="menu-dropdown-item group" :class="page === 'suratAjukan' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                    <a href="{{route('warga.surat.index')}}" class="menu-dropdown-item group" :class="page === 'suratAjukan' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
                       Ajukan Surat
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="menu-dropdown-item group" :class="page === 'suratList' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
-                      Status Permohonan
                     </a>
                   </li>
                 @endif

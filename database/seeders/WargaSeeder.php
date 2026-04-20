@@ -15,6 +15,29 @@ class WargaSeeder extends Seeder
         // Ambil semua KK
         $kks = KartuKeluarga::all();
 
+        $user = User::create([
+            'name' => ("NAJURRRR"),
+            'email' => ("najur@gmail.com"),
+            'password' => Hash::make('password'),
+            'role' => 'warga',
+        ]);
+        $kepala = Warga::create([
+                'user_id' => $user->id,
+                'kartu_keluarga_id' => 1,
+                'nik' => fake()->unique()->numerify('################'),
+                'nama_lengkap' =>  "NAJARRRR",
+                'tempat_lahir' => fake()->city(),
+                'tanggal_lahir' => fake()->date(),
+                'jenis_kelamin' => 'laki_laki',
+                'agama' => fake()->randomElement(['islam','kristen','katolik','hindu','buddha']),
+                'pekerjaan' => fake()->jobTitle(),
+                'no_telepon' => fake()->phoneNumber(),
+                'pendapatan' => rand(1000000, 10000000),
+                'is_kepala_keluarga' => true,
+                'status_dalam_kk' => 'kepala_keluarga',
+                'status_warga' => 'aktif',
+            ]);
+
         foreach ($kks as $kk) {
 
             // ======================

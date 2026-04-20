@@ -13,6 +13,15 @@ class KartuKeluargaSeeder extends Seeder
      */
 public function run(): void
 {
+    KartuKeluarga::create([
+        'id' => 1,
+        'no_kk' => fake()->unique()->numerify('################'),
+        'no_rumah' => rand(1, 100),
+        'alamat' => fake()->address(),
+        'blok' => chr(rand(65, 70)),
+        'status_hunian' => fake()->randomElement(['pemilik','kontrak','kost']),
+        'tanggal_mulai_tinggal' => now(),
+    ]);
     for ($i = 0; $i < 10; $i++) {
         KartuKeluarga::create([
             'no_kk' => fake()->unique()->numerify('################'),
