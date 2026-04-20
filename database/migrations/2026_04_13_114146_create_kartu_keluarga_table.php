@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('kartu_keluarga', function (Blueprint $table) {
             $table->id();
             $table->string('no_kk', 16)->unique();
-            $table->string('no_rumah', 10);
+            $table->string('alamat', 255);
+            $table->string('no_rumah', 10)->nullable();
             $table->string('blok', 10)->nullable();
             $table->enum('status_hunian', ['pemilik', 'kontrak', 'kost']);
             $table->date('tanggal_mulai_tinggal');

@@ -8,7 +8,4 @@
         {{-- Isi konten dashboard kamu di sini --}}
         <p class="text-black dark:text-white">Selamat datang Admin!</p>
     </div>
-
-    
-
 @endsection

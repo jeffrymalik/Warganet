@@ -70,14 +70,14 @@
           {{-- MENU ITEM: NOTIFIKASI      --}}
           {{-- Tampil untuk ADMIN & WARGA --}}
           {{-- ========================== --}}
-          <li>
+          
+          {{-- <li>
             <a
               href="#"
               class="menu-item group"
               :class="(selected === 'Notifikasi') || (page === 'notifikasi') ? 'menu-item-active' : 'menu-item-inactive'"
               @click.prevent="selected = (selected === 'Notifikasi' ? '' : 'Notifikasi')"
             >
-              {{-- Icon Bell --}}
               <svg
                 :class="(selected === 'Notifikasi') || (page === 'notifikasi') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
                 width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -86,7 +86,8 @@
               </svg>
               <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">Notifikasi</span>
             </a>
-          </li>
+          </li> --}}
+
           {{-- END NOTIFIKASI --}}
 
           {{-- ================================= --}}
@@ -421,15 +422,16 @@
             <a
               href="#"
               class="menu-item group"
-              :class="(selected === 'DataWarga') || (page === 'daftarWarga' || page === 'tambahWarga' || page === 'wargaMampu') ? 'menu-item-active' : 'menu-item-inactive'"
+              {{-- Class Active: Jika sedang dipilih ATAU route saat ini adalah bagian dari warga --}}
+              :class="(selected === 'DataWarga' || '{{ request()->routeIs('admin.warga.*') }}') ? 'menu-item-active' : 'menu-item-inactive'"
               @click.prevent="selected = (selected === 'DataWarga' ? '' : 'DataWarga')"
             >
               {{-- Icon Users --}}
-              <svg
-                :class="(selected === 'DataWarga') || (page === 'daftarWarga' || page === 'tambahWarga' || page === 'wargaMampu') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+             <svg
+                :class="(selected === 'DataWarga' || '{{ request()->routeIs('admin.warga.*') }}') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
                 width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
               >
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M8.75 6.5C8.75 4.84315 10.0931 3.5 11.75 3.5C13.4069 3.5 14.75 4.84315 14.75 6.5C14.75 8.15685 13.4069 9.5 11.75 9.5C10.0931 9.5 8.75 8.15685 8.75 6.5ZM11.75 2C9.26472 2 7.25 4.01472 7.25 6.5C7.25 8.98528 9.26472 11 11.75 11C14.2353 11 16.25 8.98528 16.25 6.5C16.25 4.01472 14.2353 2 11.75 2ZM7.25 13.5C5.18957 13.5 3.5 15.1896 3.5 17.25V19.25C3.5 19.6642 3.83579 20 4.25 20C4.66421 20 5 19.6642 5 19.25V17.25C5 16.0179 6.01793 15 7.25 15H16.25C17.4821 15 18.5 16.0179 18.5 17.25V19.25C18.5 19.6642 18.8358 20 19.25 20C19.6642 20 20 19.6642 20 19.25V17.25C20 15.1896 18.3104 13.5 16.25 13.5H7.25Z" fill="" />
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M8.75 6.5C8.75 4.84315 10.0931 3.5 11.75 3.5C13.4069 3.5 14.75 4.84315 14.75 6.5C14.75 8.15685 13.4069 9.5 11.75 9.5C10.0931 9.5 8.75 8.15685 8.75 6.5ZM11.75 2C9.26472 2 7.25 4.01472 7.25 6.5C7.25 8.98528 9.26472 11 11.75 11C14.2353 11 16.25 8.98528 16.25 6.5C16.25 4.01472 14.2353 2 11.75 2ZM7.25 13.5C5.18957 13.5 3.5 15.1896 3.5 17.25V19.25C3.5 19.6642 3.83579 20 4.25 20C4.66421 20 5 19.6642 5 19.25V17.25C5 16.0179 6.01793 15 7.25 15H16.25C17.4821 15 18.5 16.0179 18.5 17.25V19.25C18.5 19.6642 18.8358 20 19.25 20C19.6642 20 20 19.6642 20 19.25V17.25C20 15.1896 18.3104 13.5 16.25 13.5H7.25Z" fill="currentColor" />
               </svg>
               <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">Data Warga</span>
               <svg
@@ -444,17 +446,33 @@
             <div class="overflow-hidden transform translate" :class="(selected === 'DataWarga') ? 'block' : 'hidden'">
               <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'" class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
                 <li>
-                  <a href="#" class="menu-dropdown-item group" :class="page === 'daftarWarga' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                  <a 
+                    href="{{ route('admin.warga.index') }}" 
+                    {{-- Class Active khusus untuk sub-menu --}}
+                    class="menu-dropdown-item group {{ request()->routeIs('admin.warga.index') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}"
+                  >
+                    Daftar Kartu Keluarga
+                  </a>
+                </li>
+                <li>
+                  <a 
+                    href="{{ route('admin.warga.semua') }}" 
+                    {{-- Class Active khusus untuk sub-menu --}}
+                    class="menu-dropdown-item group {{ request()->routeIs('admin.warga.semua') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}"
+                  >
+                    List Semua Warga
+                  </a>
+                </li>
+                {{-- <li>
+                  <a 
+                    href="{{ route('admin.warga.index') }}" 
+                    class="menu-dropdown-item group {{ request()->routeIs('admin.warga.index') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}"
+                  >
                     Daftar Warga
                   </a>
-                </li>
+                </li> --}}
                 <li>
-                  <a href="#" class="menu-dropdown-item group" :class="page === 'tambahWarga' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
-                    Tambah Warga
-                  </a>
-                </li>
-                <li>
-                  <a href="#" class="menu-dropdown-item group" :class="page === 'wargaMampu' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                  <a href="{{route('admin.warga.kategoriEkonomi')}}" class="menu-dropdown-item group {{ request()->routeIs('admin.warga.kategoriEkonomi') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
                     Kategori Ekonomi Warga
                   </a>
                 </li>

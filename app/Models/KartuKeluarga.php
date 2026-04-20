@@ -12,6 +12,7 @@ class KartuKeluarga extends Model
     protected $fillable = [
         'no_kk',
         'no_rumah',
+        'alamat',
         'blok',
         'status_hunian',
         'tanggal_mulai_tinggal',
@@ -49,8 +50,6 @@ class KartuKeluarga extends Model
                     ->where('is_kepala_keluarga', false);
     }
 
-    // ─── Accessor ─────────────────────────────────────────
-
     /**
      * Label status hunian yang lebih rapi
      */
@@ -73,4 +72,48 @@ class KartuKeluarga extends Model
             ? "No. {$this->no_rumah} Blok {$this->blok}"
             : "No. {$this->no_rumah}";
     }
-}
+
+    /**
+     * Total pendapatan seluruh anggota KK (termasuk kepala keluarga)
+     */
+    public function getTotalPendapatanAttribute(): int
+    {
+        return $this->wargas->sum('pendapatan');
+    }
+
+    /**
+     * Format total pendapatan KK ke Rupiah
+     */
+    public function getTotalPendapatanFormatAttribute(): string
+      {
+        return 'Rp ' . number_format($this->total_pendapatan, 0, ',', '.');
+    }
+
+    /**
+     * Kategori ekonomi berdasarkan total pendapatan seluruh KK
+     */
+    public function getKategoriEkonomiAttribute(): string
+    {
+         return match (true) {
+            $this->total_pendapatan < 1_000_000                                          => 'Tidak Mampu',
+            $this->total_pendapatan >= 1_000_000 && $this->total_pendapatan <= 3_000_000 => 'Kurang Mampu',
+            $this->total_pendapatan > 3_000_000 && $this->total_pendapatan <= 7_000_000  => 'Mampu',
+            $this->total_pendapatan > 7_000_000                                          => 'Sangat Mampu',
+            default                                                                      => '-',
+        };
+    }
+
+    /**
+     * Warna badge kategori ekonomi KK (Tailwind class)
+     */
+    public function getBadgeEkonomiAttribute(): string
+    {
+        return match ($this->kategori_ekonomi) {
+            'Tidak Mampu'  => 'bg-red-100 text-red-700',
+            'Kurang Mampu' => 'bg-orange-100 text-orange-700',
+            'Mampu'        => 'bg-blue-100 text-blue-700',
+            'Sangat Mampu' => 'bg-green-100 text-green-700',
+            default        => 'bg-gray-100 text-gray-700'
+        }; 
+    }
+}  

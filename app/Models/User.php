@@ -33,4 +33,8 @@ class User extends Authenticatable
     {
         return $this->role === 'warga';
     }
+    public function warga()
+    {
+        return $this->hasOne(\App\Models\Warga::class, 'user_id');
+    }
 }
