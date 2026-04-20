@@ -16,11 +16,10 @@ Route::middleware('guest')->group(function () {
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
-Route::get('/profile', [ProfileControlller::class, 'index'])->name('login');
-
-
 // Route Admin
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+
+
     Route::get('/dashboard', [DashboardController::class, 'adminIndex'])->name('dashboard');
     // Kartu Keluarga (resource-style)
     Route::get('manajemenWarga',                          [WargaController::class, 'index'])  ->name('warga.index');
@@ -62,5 +61,15 @@ Route::middleware(['auth', 'role:warga'])->prefix('warga')->name('warga.')->grou
     Route::post('keluhan',             [App\Http\Controllers\Warga\KeluhanController::class, 'store']) ->name('keluhan.store');
     Route::get('keluhan/{keluhan}',    [App\Http\Controllers\Warga\KeluhanController::class, 'show'])  ->name('keluhan.show');
     Route::post('keluhan/{keluhan}/pesan', [App\Http\Controllers\Warga\KeluhanController::class, 'kirimPesan'])->name('keluhan.pesan');
+});
+Route::middleware('auth')->group(function () {
+    Route::get('/profile',          [ProfileControlller::class, 'show'])->name('profile');
+    Route::get('/profile/edit',     [ProfileControlller::class, 'edit'])->name('profile.edit');
+ 
+    Route::patch('/profile/foto',     [ProfileControlller::class, 'updateFoto'])->name('profile.update.foto');
+    Route::delete('/profile/foto',    [ProfileControlller::class, 'hapusFoto'])->name('profile.hapus.foto');
+    Route::patch('/profile/akun',     [ProfileControlller::class, 'updateAkun'])->name('profile.update.akun');
+    Route::patch('/profile/password', [ProfileControlller::class, 'updatePassword'])->name('profile.update.password');
+    Route::patch('/profile/warga',    [ProfileControlller::class, 'updateWarga'])->name('profile.update.warga');
 });
 
