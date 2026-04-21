@@ -37,4 +37,16 @@ class User extends Authenticatable
     {
         return $this->hasOne(\App\Models\Warga::class, 'user_id');
     }
+    // app/Models/User.php
+    public function kk()
+    {
+        return $this->hasOneThrough(
+            \App\Models\KartuKeluarga::class, // target
+            \App\Models\Warga::class,          // perantara
+            'user_id',           // FK di tabel warga → users
+            'id',                // PK di tabel kartu_keluarga
+            'id',                // PK di tabel users
+            'kartu_keluarga_id'  // FK di tabel warga → kartu_keluarga
+        );
+    }
 }

@@ -8,6 +8,10 @@ use App\Http\Controllers\WargaController;
 use App\Http\Controllers\Admin\JadwalKegiatanController;
 use App\Http\Controllers\Admin\KeluhanController;
 use App\Http\Controllers\Admin\PengumumanController;
+use App\Http\Controllers\Admin\IplController;
+use App\Http\Controllers\Admin\IuranWargaController;
+use App\Http\Controllers\MidtransWebhookController;
+use App\Http\Controllers\Warga\TagihanController;
 
 
 Route::get('/', fn() => redirect()->route('login'));
@@ -69,6 +73,21 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::put('/pengumuman/{pengumuman}', [PengumumanController::class, 'update'])->name('pengumuman.update');
     Route::delete('/pengumuman/{pengumuman}', [PengumumanController::class, 'destroy'])->name('pengumuman.destroy');
 
+        // IPL
+    Route::get('/ipl', [IplController::class, 'index'])->name('ipl.index');
+    Route::post('/ipl/generate', [IplController::class, 'generate'])->name('ipl.generate');
+    Route::post('/ipl/{tagihan}/lunas', [IplController::class, 'tandaiLunas'])->name('ipl.lunas');
+    Route::get('/ipl/riwayat', [IplController::class, 'riwayat'])->name('ipl.riwayat');
+    Route::post('/ipl/{tagihan}/bayar', [IplController::class, 'bayar'])->name('ipl.bayar');
+
+        // Iuran Warga
+    Route::get('/iuran', [IuranWargaController::class, 'index'])->name('iuran.index');
+    Route::post('/iuran', [IuranWargaController::class, 'store'])->name('iuran.store');
+    Route::delete('/iuran/{iuran}', [IuranWargaController::class, 'destroy'])->name('iuran.destroy');
+    Route::get('/iuran/{iuran}', [IuranWargaController::class, 'detail'])->name('iuran.detail');
+    Route::post('/iuran/tagihan/{tagihan}/lunas', [IuranWargaController::class, 'tandaiLunas'])->name('iuran.tagihan.lunas');
+    Route::post('/iuran/tagihan/{tagihan}/bayar', [IuranWargaController::class, 'bayar'])->name('iuran.tagihan.bayar');
+
     
 });
 
@@ -88,6 +107,13 @@ Route::middleware(['auth', 'role:warga'])->prefix('warga')->name('warga.')->grou
     Route::post('surat',                  [App\Http\Controllers\Warga\PermohonanSuratController::class, 'store']) ->name('surat.store');
     Route::get('surat/{permohonanSurat}', [App\Http\Controllers\Warga\PermohonanSuratController::class, 'show'])  ->name('surat.show');
 
+     // Halaman tagihan warga
+    Route::get('/tagihan', [TagihanController::class, 'index'])->name('tagihan.index');
+
+    // Bayar via Midtrans (reuse controller admin, cukup tambah route baru)
+    Route::post('/ipl/{tagihan}/bayar', [IplController::class, 'bayar'])->name('ipl.bayar');
+    Route::post('/iuran/tagihan/{tagihan}/bayar', [IuranWargaController::class, 'bayar'])->name('iuran.bayar');
+
 
 });
 Route::middleware('auth')->group(function () {
@@ -101,3 +127,4 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile/warga',    [ProfileControlller::class, 'updateWarga'])->name('profile.update.warga');
 });
 
+Route::post('/midtrans/webhook', [MidtransWebhookController::class, 'handle']);

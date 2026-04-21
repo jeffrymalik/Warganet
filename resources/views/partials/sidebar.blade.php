@@ -94,6 +94,7 @@
           {{-- MENU ITEM: JADWAL & PENGUMUMAN    --}}
           {{-- Tampil untuk ADMIN & WARGA        --}}
           {{-- ================================= --}}
+          @if (auth()->user()->role === 'admin')
           <li>
             <a
               href="#"
@@ -121,18 +122,19 @@
             <div class="overflow-hidden transform translate" :class="(selected === 'Jadwal') ? 'block' : 'hidden'">
               <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'" class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
                 <li>
-                  <a href="#" class="menu-dropdown-item group" :class="page === 'jadwal' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                  <a href="{{route('admin.jadwal.index')}}" class="menu-dropdown-item group" :class="page === 'jadwal' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
                     Jadwal Kegiatan
                   </a>
                 </li>
                 <li>
-                  <a href="#" class="menu-dropdown-item group" :class="page === 'pengumuman' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                  <a href="{{route('admin.pengumuman.index')}}" class="menu-dropdown-item group" :class="page === 'pengumuman' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
                     Pengumuman
                   </a>
                 </li>
               </ul>
             </div>
           </li>
+          @endif
           {{-- END JADWAL & PENGUMUMAN --}}
 
           {{-- ========================= --}}
@@ -294,26 +296,26 @@
 
                 @if (auth()->user()->role === 'admin')
                   <li>
-                    <a href="#" class="menu-dropdown-item group" :class="page === 'iplKelola' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                    <a href="{{route('admin.ipl.index')}}" class="menu-dropdown-item group" :class="page === 'iplKelola' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
                       Kelola IPL
                     </a>
                   </li>
                   <li>
-                    <a href="#" class="menu-dropdown-item group" :class="page === 'iplRiwayat' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                    <a href="{{route('admin.ipl.riwayat')}}" class="menu-dropdown-item group" :class="page === 'iplRiwayat' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
                       Riwayat Pembayaran
                     </a>
                   </li>
                 @else
                   <li>
-                    <a href="#" class="menu-dropdown-item group" :class="page === 'iplTagihan' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
-                      Tagihan IPL Saya
+                    <a href="{{route('warga.tagihan.index')}}" class="menu-dropdown-item group" :class="page === 'iplTagihan' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                      Tagihan Saya
                     </a>
                   </li>
-                  <li>
+                  {{-- <li>
                     <a href="#" class="menu-dropdown-item group" :class="page === 'iplRiwayat' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
                       Riwayat Bayar
                     </a>
-                  </li>
+                  </li> --}}
                 @endif
 
               </ul>
@@ -353,17 +355,12 @@
 
                 @if (auth()->user()->role === 'admin')
                   <li>
-                    <a href="#" class="menu-dropdown-item group" :class="page === 'iuranKelola' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                    <a href="{{route('admin.iuran.index')}}" class="menu-dropdown-item group" :class="page === 'iuranKelola' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
                       Kelola Iuran
                     </a>
                   </li>
                   <li>
-                    <a href="#" class="menu-dropdown-item group" :class="page === 'iuranRiwayat' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
-                      Riwayat Pembayaran
-                    </a>
-                  </li>
-                @else
-                  <li>
+                  {{-- <li>
                     <a href="#" class="menu-dropdown-item group" :class="page === 'iuranTagihan' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
                       Tagihan Iuran Saya
                     </a>
@@ -372,7 +369,7 @@
                     <a href="#" class="menu-dropdown-item group" :class="page === 'iuranRiwayat' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
                       Riwayat Bayar
                     </a>
-                  </li>
+                  </li> --}}
                 @endif
 
               </ul>
