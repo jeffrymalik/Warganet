@@ -55,7 +55,7 @@
                     x-show="open"
                     @click.outside="open = false"
                     x-transition
-                    class="absolute right-0 mt-2 w-64 rounded-xl border border-gray-200 bg-white p-4 shadow-lg z-50 dark:border-gray-700 dark:bg-gray-800"
+                    class="absolute left-0 mt-2 w-64 rounded-xl border border-gray-200 bg-white p-4 shadow-lg z-50 dark:border-gray-700 dark:bg-gray-800"
                 >
                     <form method="GET" action="{{ route('admin.warga.semua') }}">
                         @if(request()->filled('search'))
@@ -269,7 +269,7 @@
 </div>
 
 {{-- MODAL DETAIL WARGA --}}
-<div style="border: 1px solif black" id="modal-detail" class="fixed inset-0 z-50 hidden items-center justify-center p-4" role="dialog">
+<div style="border: 1px solif black" id="modal-detail" class="fixed inset-0 z-99999 hidden items-center justify-center p-4" role="dialog">
     <div id="modal-backdrop" onclick="tutupDetail()" class="absolute inset-0 bg-black/60"></div>
 
     <div class="relative w-full max-w-md rounded-2xl bg-white dark:bg-gray-900 shadow-xl flex flex-col max-h-[90vh]">

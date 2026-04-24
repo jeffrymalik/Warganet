@@ -2,7 +2,88 @@
 
 @section('title', 'Jadwal Kegiatan')
 
+@push('styles')
+<style>
+    /* List View */
+    .fc-list {
+        border: none !important;
+    }
+    .fc-list-day-cushion {
+        background: transparent !important;
+        padding: 10px 16px !important;
+    }
+    .fc-list-day th {
+        background: transparent !important;
+        border: none !important;
+        border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+    }
+    .fc-list-day-text,
+    .fc-list-day-side-text {
+        font-size: 13px !important;
+        font-weight: 600 !important;
+        color: #6b7280 !important;
+    }
+    .fc-list-event {
+        border: none !important;
+        background: transparent !important;
+    }
+    .fc-list-event:hover td {
+        background: rgba(255,255,255,0.03) !important;
+        cursor: pointer;
+    }
+    .fc-list-event td {
+        border: none !important;
+        padding: 10px 16px !important;
+        border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+    }
+    .fc-list-event-title {
+        font-size: 14px !important;
+        font-weight: 500 !important;
+    }
+    .fc-list-event-time {
+        display: none !important;
+    }
+    .fc-list-empty {
+        background: transparent !important;
+        color: #9ca3af !important;
+        font-size: 14px !important;
+    }
+
+    /* Header Toolbar */
+    .fc-toolbar-title {
+        font-size: 16px !important;
+        font-weight: 600 !important;
+    }
+    .fc-button {
+        background: transparent !important;
+        border: 1px solid #374151 !important;
+        color: #9ca3af !important;
+        font-size: 13px !important;
+        padding: 6px 14px !important;
+        border-radius: 8px !important;
+        box-shadow: none !important;
+    }
+    .fc-button:hover {
+        background: rgba(255,255,255,0.05) !important;
+        color: #fff !important;
+    }
+    .fc-button-active {
+        background: #465fff !important;
+        border-color: #465fff !important;
+        color: #fff !important;
+    }
+    .fc-button-primary:not(:disabled).fc-button-active {
+        background: #465fff !important;
+        border-color: #465fff !important;
+    }
+</style>
+@endpush
+
 @section('content')
+
+<div x-data="{ pageName: `Jadwal`}">
+    @include('../../../partials/breadcrumb')
+</div>
 <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
     <div id="calendar" class="min-h-screen p-4"></div>
 </div>

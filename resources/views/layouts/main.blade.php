@@ -10,7 +10,9 @@
     <title>
       @yield('title', 'Dashboard | TailAdmin')
     </title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('css/style.css') }}"> --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @stack('styles')  {{-- tambahkan ini --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
   </head>
   <body
@@ -54,12 +56,31 @@
     </div>
     <!-- ===== Page Wrapper End ===== -->
 
-    <script src="{{ asset('js/bundle.js') }}"></script>
+    {{-- <script src="{{ asset('js/bundle.js') }}"></script> --}}
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @yield('scripts')
     @stack('scripts')
+
+    @if(session('success'))
+      <script>
+          document.addEventListener('DOMContentLoaded', function () {
+              Swal.fire({
+                  toast: true,
+                  position: 'top-end',
+                  icon: 'success',
+                  title: '{{ session('success') }}',
+                  showConfirmButton: false,
+                  timer: 3000,
+                  timerProgressBar: true,
+                  customClass: {
+                      popup: 'swal-toast-z'
+                  }
+              });
+          });
+      </script>
+    @endif
 
     
     {{-- <script src="https://cdn.datatables.net/1.13.6/js/dataTables.tailwindcss.min.js"></script> --}}

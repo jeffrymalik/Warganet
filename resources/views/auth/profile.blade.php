@@ -1,437 +1,256 @@
-@extends('../layouts.main')
+@extends('layouts.main')
 
-@section('title', 'Edit Profil')
+@section('title', 'Profil Saya')
 
 @section('content')
-<div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
 
-    {{-- Breadcrumb --}}
-    <div class="mb-6">
-        <nav class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-            <a href="#" class="hover:text-gray-700 dark:hover:text-gray-200">Dashboard</a>
-            <span>/</span>
-            <a href="{{ route('profile') }}" class="hover:text-gray-700 dark:hover:text-gray-200">Profil</a>
-            <span>/</span>
-            <span class="text-gray-800 dark:text-white/90 font-medium">Edit Profil</span>
-        </nav>
-    </div>
+@php $isWarga = auth()->user()->role === 'warga'; @endphp
 
-    {{-- Alert Sukses --}}
-    @if(session('success'))
-    <div class="mb-6 flex items-center gap-3 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 dark:border-green-800 dark:bg-green-900/20 dark:text-green-400">
-        <svg class="shrink-0 w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-        </svg>
-        {{ session('success') }}
-    </div>
-    @endif
+<div x-data="{ showEditModal: false, pageName: 'Profil Saya' }">
 
-    {{-- Alert Error --}}
-    @if($errors->any())
-    <div class="mb-6 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
-        <svg class="shrink-0 w-5 h-5 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-        </svg>
-        <div>
-            <p class="font-medium mb-1">Terdapat kesalahan input:</p>
-            <ul class="list-disc list-inside space-y-0.5">
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    </div>
-    @endif
+    @include('../../../partials/breadcrumb')
 
-    <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
-        <div class="flex items-center justify-between mb-7">
-            <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Edit Profil</h3>
-            <a href="{{ route('profile') }}"
-               class="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                </svg>
-                Kembali ke Profil
-            </a>
-        </div>
+    <div class="mt-6 space-y-6">
 
-        {{-- ══════════════════════════════════════════
-             FORM FOTO PROFIL
-        ══════════════════════════════════════════ --}}
-        <form action="{{ route('profile.update.foto') }}" method="POST" enctype="multipart/form-data" id="form-foto">
-            @csrf
-            @method('PATCH')
+        {{-- BOX PROFIL UTAMA --}}
+        <div class="p-5 border border-gray-200 rounded-2xl bg-white dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
+            <div class="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
+                <div class="flex flex-col items-center w-full gap-6 xl:flex-row">
 
-            <div class="p-5 mb-6 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
-                <h4 class="text-base font-semibold text-gray-800 dark:text-white/90 mb-5 flex items-center gap-2">
-                    <span class="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400 text-xs">
-                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
-                        </svg>
-                    </span>
-                    Foto Profil
-                </h4>
-
-                <div class="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
-
-                    {{-- Foto saat ini + tombol hapus --}}
-                    <div class="relative shrink-0">
-                        <div class="w-28 h-28 rounded-full overflow-hidden border-2 border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 flex items-center justify-center shadow">
-                            @if(auth()->user()->avatar)
-                                <img id="avatar-preview"
-                                     src="{{ asset('storage/' . auth()->user()->avatar) }}"
-                                     alt="Foto Profil"
-                                     class="w-full h-full object-cover">
-                                <span id="avatar-initials"
-                                      class="hidden text-4xl font-bold text-gray-400 dark:text-gray-500 select-none uppercase">
-                                    {{ mb_substr(auth()->user()->name, 0, 1) }}
+                    {{-- Foto --}}
+                    <div class="w-20 h-20 overflow-hidden border border-gray-200 rounded-full dark:border-gray-800 shrink-0">
+                        @if(auth()->user()->foto)
+                            <img src="{{ Storage::url(auth()->user()->foto) }}" alt="foto" class="w-full h-full object-cover">
+                        @else
+                            <div class="w-full h-full bg-brand-100 dark:bg-brand-500/20 flex items-center justify-center">
+                                <span class="text-2xl font-bold text-brand-600 dark:text-brand-400">
+                                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                                 </span>
-                            @else
-                                <img id="avatar-preview" src="" alt="Foto Profil" class="w-full h-full object-cover hidden">
-                                <span id="avatar-initials"
-                                      class="text-4xl font-bold text-gray-400 dark:text-gray-500 select-none uppercase">
-                                    {{ mb_substr(auth()->user()->name, 0, 1) }}
-                                </span>
-                            @endif
-                        </div>
-
-                        {{-- Badge kamera (klik untuk pilih foto) --}}
-                        <button type="button"
-                                onclick="document.getElementById('avatar').click()"
-                                class="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center shadow-md transition-colors"
-                                title="Ganti foto">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
-                            </svg>
-                        </button>
-                    </div>
-
-                    {{-- Kanan: drop zone + info --}}
-                    <div class="flex-1 w-full">
-
-                        {{-- Drop Zone --}}
-                        <div id="drop-zone"
-                             class="relative flex flex-col items-center justify-center w-full rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 px-6 py-8 text-center cursor-pointer hover:border-indigo-400 hover:bg-indigo-50/40 dark:hover:border-indigo-600 dark:hover:bg-indigo-900/10 transition-all duration-200"
-                             onclick="document.getElementById('avatar').click()"
-                             ondragover="handleDragOver(event)"
-                             ondragleave="handleDragLeave(event)"
-                             ondrop="handleDrop(event)">
-
-                            <div class="mb-3 p-3 rounded-full bg-gray-100 dark:bg-gray-700" id="dz-icon-wrap">
-                                <svg class="w-6 h-6 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
-                                </svg>
                             </div>
+                        @endif
+                    </div>
 
-                            <p id="dz-text" class="text-sm font-medium text-gray-600 dark:text-gray-400">
-                                Klik atau seret foto ke sini
+                    {{-- Nama & Info --}}
+                    <div>
+                        <h4 class="mb-2 text-lg font-semibold text-center text-gray-800 dark:text-white/90 xl:text-left">
+                            {{ auth()->user()->name }}
+                        </h4>
+                        @if($isWarga && $warga)
+                            <div class="flex flex-col items-center gap-1 text-center xl:flex-row xl:gap-3 xl:text-left">
+                                <p class="text-sm text-gray-500 dark:text-gray-400 capitalize">
+                                    {{ str_replace('_', ' ', $warga->status_dalam_kk) }}
+                                </p>
+                                <div class="hidden h-3.5 w-px bg-gray-300 dark:bg-gray-700 xl:block"></div>
+                                <p class="text-sm font-mono text-gray-500 dark:text-gray-400">
+                                    NIK: {{ $warga->nik }}
+                                </p>
+                            </div>
+                        @else
+                            <p class="text-sm text-gray-500 dark:text-gray-400 text-center xl:text-left">
+                                Administrator
                             </p>
-                            <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">
-                                PNG, JPG, JPEG, WEBP — Maks. 2MB
-                            </p>
+                        @endif
+                    </div>
+                </div>
 
-                            <p id="file-name"
-                               class="hidden mt-3 text-xs font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20 px-3 py-1 rounded-full border border-indigo-200 dark:border-indigo-800">
-                            </p>
+                {{-- Tombol Edit --}}
+                <button
+                    @click="showEditModal = true"
+                    class="flex items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] whitespace-nowrap"
+                >
+                    <svg class="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M15.0911 2.78206C14.2125 1.90338 12.7878 1.90338 11.9092 2.78206L4.57524 10.116C4.26682 10.4244 4.0547 10.8158 3.96468 11.2426L3.31231 14.3352C3.25997 14.5833 3.33653 14.841 3.51583 15.0203C3.69512 15.1996 3.95286 15.2761 4.20096 15.2238L7.29355 14.5714C7.72031 14.4814 8.11172 14.2693 8.42013 13.9609L15.7541 6.62695C16.6327 5.74827 16.6327 4.32365 15.7541 3.44497L15.0911 2.78206ZM12.9698 3.84272C13.2627 3.54982 13.7376 3.54982 14.0305 3.84272L14.6934 4.50563C14.9863 4.79852 14.9863 5.2734 14.6934 5.56629L14.044 6.21573L12.3204 4.49215L12.9698 3.84272ZM11.2597 5.55281L5.6359 11.1766C5.53309 11.2794 5.46238 11.4099 5.43238 11.5522L5.01758 13.5185L6.98394 13.1037C7.1262 13.0737 7.25666 13.003 7.35947 12.9002L12.9833 7.27639L11.2597 5.55281Z" fill=""/>
+                    </svg>
+                    Edit Profil
+                </button>
+            </div>
+        </div>
 
-                            <input type="file"
-                                   id="avatar"
-                                   name="avatar"
-                                   accept="image/png,image/jpeg,image/webp"
-                                   class="hidden"
-                                   onchange="handleFileChange(this)">
-                        </div>
+        {{-- BOX INFORMASI PERSONAL --}}
+        <div class="p-5 border border-gray-200 rounded-2xl bg-white dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
+            <h4 class="text-lg font-semibold text-gray-800 dark:text-white/90 mb-6">Informasi Personal</h4>
 
-                        @error('avatar')
-                            <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
-                        @enderror
+            <div class="grid grid-cols-1 gap-5 lg:grid-cols-2 lg:gap-7">
+                <div>
+                    <p class="mb-1 text-xs text-gray-400 dark:text-gray-500">Nama Lengkap</p>
+                    <p class="text-sm font-medium text-gray-800 dark:text-white/90">{{ auth()->user()->name }}</p>
+                </div>
+                <div>
+                    <p class="mb-1 text-xs text-gray-400 dark:text-gray-500">Email</p>
+                    <p class="text-sm font-medium text-gray-800 dark:text-white/90">{{ auth()->user()->email }}</p>
+                </div>
 
-                        <p class="mt-3 text-xs text-gray-400 dark:text-gray-500">
-                            Foto akan ditampilkan sebagai lingkaran. Gunakan foto wajah yang jelas untuk tampilan terbaik.
+                @if($isWarga && $warga)
+                    <div>
+                        <p class="mb-1 text-xs text-gray-400 dark:text-gray-500">No. Telepon</p>
+                        <p class="text-sm font-medium text-gray-800 dark:text-white/90">{{ $warga->no_telepon ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <p class="mb-1 text-xs text-gray-400 dark:text-gray-500">Agama</p>
+                        <p class="text-sm font-medium text-gray-800 dark:text-white/90 capitalize">{{ $warga->agama }}</p>
+                    </div>
+                    <div>
+                        <p class="mb-1 text-xs text-gray-400 dark:text-gray-500">Jenis Kelamin</p>
+                        <p class="text-sm font-medium text-gray-800 dark:text-white/90">{{ $warga->label_jenis_kelamin }}</p>
+                    </div>
+                    <div>
+                        <p class="mb-1 text-xs text-gray-400 dark:text-gray-500">Tempat, Tanggal Lahir</p>
+                        <p class="text-sm font-medium text-gray-800 dark:text-white/90">
+                            {{ $warga->tempat_lahir }}, {{ optional($warga->tanggal_lahir)->format('d M Y') }}
                         </p>
-
-                        {{-- Tombol aksi --}}
-                        <div class="flex items-center gap-3 mt-4 flex-wrap">
-
-                            <button type="submit"
-                                    class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-colors">
-                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
-                                </svg>
-                                Simpan Foto
-                            </button>
-
-                            <button type="button" id="btn-reset"
-                                    onclick="resetPreview()"
-                                    class="hidden items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 transition-colors">
-                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                                </svg>
-                                Batalkan
-                            </button>
-
-                            @if(auth()->user()->avatar)
-                            <button type="button"
-                                    onclick="konfirmasiHapusFoto()"
-                                    class="inline-flex items-center gap-1.5 rounded-lg border border-red-200 bg-red-50 px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-100 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40 transition-colors">
-                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/>
-                                </svg>
-                                Hapus Foto
-                            </button>
-                            @endif
-                        </div>
                     </div>
-                </div>
-            </div>
-        </form>
-
-        {{-- Form Hapus Foto (hidden, di-submit via JS) --}}
-        <form id="form-hapus-foto" action="{{ route('profile.hapus.foto') }}" method="POST" class="hidden">
-            @csrf
-            @method('DELETE')
-        </form>
-
-        {{-- ══════════════════════════════════════════
-             FORM DATA AKUN
-        ══════════════════════════════════════════ --}}
-        <form action="{{ route('profile.update.akun') }}" method="POST">
-            @csrf
-            @method('PATCH')
-
-            <div class="p-5 mb-6 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
-                <h4 class="text-base font-semibold text-gray-800 dark:text-white/90 mb-5 flex items-center gap-2">
-                    <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 text-xs font-bold">1</span>
-                    Data Akun
-                </h4>
-
-                <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+                @else
                     <div>
-                        <label class="block mb-1.5 text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Nama Akun <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" name="name" value="{{ old('name', auth()->user()->name) }}"
-                            placeholder="Nama akun Anda"
-                            class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder-gray-500 @error('name') border-red-400 focus:border-red-500 focus:ring-red-500 @enderror">
-                        @error('name') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+                        <p class="mb-1 text-xs text-gray-400 dark:text-gray-500">Role</p>
+                        <p class="text-sm font-medium text-gray-800 dark:text-white/90">Administrator</p>
                     </div>
-
                     <div>
-                        <label class="block mb-1.5 text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Email <span class="text-red-500">*</span>
-                        </label>
-                        <input type="email" name="email" value="{{ old('email', auth()->user()->email) }}"
-                            placeholder="email@contoh.com"
-                            class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder-gray-500 @error('email') border-red-400 focus:border-red-500 focus:ring-red-500 @enderror">
-                        @error('email') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+                        <p class="mb-1 text-xs text-gray-400 dark:text-gray-500">Akun Dibuat</p>
+                        <p class="text-sm font-medium text-gray-800 dark:text-white/90">
+                            {{ auth()->user()->created_at->format('d M Y') }}
+                        </p>
                     </div>
-                </div>
-
-                <div class="flex justify-end mt-5">
-                    <button type="submit"
-                        class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-colors">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-                        </svg>
-                        Simpan Data Akun
-                    </button>
-                </div>
+                @endif
             </div>
-        </form>
+        </div>
 
-        {{-- ══════════════════════════════════════════
-             FORM GANTI PASSWORD
-        ══════════════════════════════════════════ --}}
-        <form action="{{ route('profile.update.password') }}" method="POST">
-            @csrf
-            @method('PATCH')
-
-            <div class="p-5 mb-6 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
-                <h4 class="text-base font-semibold text-gray-800 dark:text-white/90 mb-5 flex items-center gap-2">
-                    <span class="flex items-center justify-center w-6 h-6 rounded-full bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400 text-xs font-bold">2</span>
-                    Ganti Password
-                    <span class="text-xs font-normal text-gray-400">(kosongkan jika tidak ingin mengganti)</span>
-                </h4>
-
-                <div class="grid grid-cols-1 gap-5 lg:grid-cols-3">
-
-                    @foreach([
-                        ['current_password', 'Password Saat Ini', 'Password saat ini'],
-                        ['password',         'Password Baru',     'Password baru'],
-                        ['password_confirmation', 'Konfirmasi Password Baru', 'Ulangi password baru'],
-                    ] as [$fieldName, $label, $placeholder])
-                    <div>
-                        <label class="block mb-1.5 text-sm font-medium text-gray-700 dark:text-gray-300">
-                            {{ $label }}
-                        </label>
-                        <div class="relative">
-                            <input type="password" name="{{ $fieldName }}" placeholder="{{ $placeholder }}"
-                                class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 pr-10 text-sm text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder-gray-500 @error($fieldName) border-red-400 @enderror">
-                            <button type="button" onclick="togglePassword(this)"
-                                class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 hover:text-gray-600">
-                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                </svg>
-                            </button>
-                        </div>
-                        @error($fieldName) <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
-                    </div>
-                    @endforeach
-
+        {{-- BOX DATA KELUARGA (khusus warga) --}}
+        @if($isWarga && $kartuKeluarga)
+        <div class="p-5 border border-gray-200 rounded-2xl bg-white dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-800 dark:text-white/90">Data Keluarga</h4>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                        No. KK: <span class="font-mono">{{ $kartuKeluarga->no_kk }}</span>
+                    </p>
                 </div>
-
-                <div class="flex justify-end mt-5">
-                    <button type="submit"
-                        class="inline-flex items-center gap-2 rounded-lg bg-yellow-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-colors">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                        </svg>
-                        Ganti Password
-                    </button>
-                </div>
+                <a
+                    href="{{ route('warga.keluarga') }}"
+                    class="inline-flex items-center gap-2 rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-600 transition"
+                >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    Lihat Data Keluarga
+                </a>
             </div>
-        </form>
+        </div>
+        @endif
 
     </div>
+
+    {{-- MODAL EDIT --}}
+    <div
+        x-show="showEditModal"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        class="fixed inset-0 z-99999 flex items-center justify-center p-4"
+        style="display: none;"
+    >
+        <div @click="showEditModal = false" class="absolute inset-0 bg-black/60"></div>
+
+        <div class="relative w-full max-w-md rounded-2xl bg-white dark:bg-gray-900 shadow-xl flex flex-col max-h-[90vh]">
+
+            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-800 shrink-0">
+                <h3 class="text-base font-semibold text-gray-800 dark:text-white">Edit Profil</h3>
+                <button @click="showEditModal = false" class="flex items-center justify-center w-8 h-8 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-white/10">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" class="flex flex-col flex-1 min-h-0">
+                @csrf
+
+                <div class="px-6 py-4 overflow-y-auto flex-1 space-y-4">
+
+                    {{-- Foto --}}
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Foto Profil</label>
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-full overflow-hidden border border-gray-200 dark:border-gray-700 shrink-0">
+                                @if(auth()->user()->foto)
+                                    <img src="{{ Storage::url(auth()->user()->foto) }}" class="w-full h-full object-cover">
+                                @else
+                                    <div class="w-full h-full bg-brand-100 flex items-center justify-center">
+                                        <span class="text-lg font-bold text-brand-600">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
+                                    </div>
+                                @endif
+                            </div>
+                            <input type="file" name="foto" accept="image/jpg,image/jpeg,image/png"
+                                class="text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border file:border-gray-300 file:text-xs file:font-medium file:text-gray-700 file:bg-white hover:file:bg-gray-50 dark:file:bg-gray-800 dark:file:border-gray-600 dark:file:text-gray-300">
+                        </div>
+                        @error('foto') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    {{-- Email --}}
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">Email</label>
+                        <input type="email" name="email" value="{{ old('email', auth()->user()->email) }}"
+                            class="w-full rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-sm text-gray-700 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                        @error('email') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    {{-- No Telepon (warga only) --}}
+                    @if($isWarga && $warga)
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">No. Telepon</label>
+                        <input type="text" name="no_hp" value="{{ old('no_hp', $warga->no_telepon) }}"
+                            class="w-full rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-sm text-gray-700 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                        @error('no_hp') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
+                    </div>
+                    @endif
+
+                    {{-- Password --}}
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">
+                            Password Baru
+                            <span class="text-gray-400 font-normal">(kosongkan jika tidak diubah)</span>
+                        </label>
+                        <input type="password" name="password"
+                            class="w-full rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-sm text-gray-700 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                        @error('password') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    {{-- Konfirmasi Password --}}
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">Konfirmasi Password</label>
+                        <input type="password" name="password_confirmation"
+                            class="w-full rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-sm text-gray-700 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                    </div>
+
+                </div>
+
+                <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-800 shrink-0 flex gap-3">
+                    <button type="button" @click="showEditModal = false"
+                        class="flex-1 rounded-lg border border-gray-300 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400">
+                        Batal
+                    </button>
+                    <button type="submit"
+                        class="flex-1 rounded-lg bg-brand-500 py-2.5 text-sm font-medium text-white hover:bg-brand-600">
+                        Simpan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </div>
 
-@push('scripts')
+{{-- Buka modal otomatis jika ada error validasi --}}
+@if($errors->any())
 <script>
-// ─── Toggle password ──────────────────────────────────
-function togglePassword(btn) {
-    const input = btn.previousElementSibling;
-    if (input.type === 'password') {
-        input.type = 'text';
-        btn.querySelector('svg').innerHTML = `
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
-        `;
-    } else {
-        input.type = 'password';
-        btn.querySelector('svg').innerHTML = `
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-        `;
-    }
-}
-
-// ─── Avatar upload ────────────────────────────────────
-const MAX_MB  = 2;
-const ALLOWED = ['image/png', 'image/jpeg', 'image/webp'];
-
-function applyFile(file) {
-    if (!file) return;
-
-    clearDropError();
-
-    if (!ALLOWED.includes(file.type)) {
-        showDropError('Format tidak didukung. Gunakan PNG, JPG, atau WEBP.');
-        return;
-    }
-    if (file.size > MAX_MB * 1024 * 1024) {
-        showDropError(`Ukuran terlalu besar. Maksimal ${MAX_MB}MB.`);
-        return;
-    }
-
-    // Preview gambar
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        const preview  = document.getElementById('avatar-preview');
-        const initials = document.getElementById('avatar-initials');
-        preview.src = e.target.result;
-        preview.classList.remove('hidden');
-        initials.classList.add('hidden');
-    };
-    reader.readAsDataURL(file);
-
-    // Nama file
-    const fileNameEl = document.getElementById('file-name');
-    fileNameEl.textContent = '✓ ' + file.name;
-    fileNameEl.classList.remove('hidden');
-
-    // Teks drop zone
-    document.getElementById('dz-text').textContent = 'Foto siap diunggah';
-
-    // Tampilkan tombol Batalkan
-    const btnReset = document.getElementById('btn-reset');
-    btnReset.classList.remove('hidden');
-    btnReset.classList.add('inline-flex');
-}
-
-function handleFileChange(input) {
-    applyFile(input.files[0] ?? null);
-}
-
-// Drag & Drop
-function handleDragOver(e) {
-    e.preventDefault();
-    document.getElementById('drop-zone').classList.add('border-indigo-400', '!bg-indigo-50/40', 'dark:border-indigo-600');
-}
-function handleDragLeave() {
-    document.getElementById('drop-zone').classList.remove('border-indigo-400', '!bg-indigo-50/40', 'dark:border-indigo-600');
-}
-function handleDrop(e) {
-    e.preventDefault();
-    handleDragLeave();
-    const file = e.dataTransfer.files[0];
-    if (!file) return;
-    // Masukkan ke input agar ikut ter-submit
-    const dt = new DataTransfer();
-    dt.items.add(file);
-    document.getElementById('avatar').files = dt.files;
-    applyFile(file);
-}
-
-// Reset pilihan
-function resetPreview() {
-    const input    = document.getElementById('avatar');
-    const preview  = document.getElementById('avatar-preview');
-    const initials = document.getElementById('avatar-initials');
-
-    input.value = '';
-
-    @if(auth()->user()->avatar)
-        preview.src = "{{ asset('storage/' . auth()->user()->avatar) }}";
-        preview.classList.remove('hidden');
-        initials.classList.add('hidden');
-    @else
-        preview.src = '';
-        preview.classList.add('hidden');
-        initials.classList.remove('hidden');
-    @endif
-
-    document.getElementById('file-name').classList.add('hidden');
-    document.getElementById('dz-text').textContent = 'Klik atau seret foto ke sini';
-
-    const btnReset = document.getElementById('btn-reset');
-    btnReset.classList.add('hidden');
-    btnReset.classList.remove('inline-flex');
-
-    clearDropError();
-}
-
-// Error message di bawah drop zone
-function showDropError(msg) {
-    clearDropError();
-    const err = document.createElement('p');
-    err.id          = 'drop-error';
-    err.className   = 'mt-2 text-xs text-red-500';
-    err.textContent = msg;
-    document.getElementById('drop-zone').after(err);
-}
-function clearDropError() {
-    document.getElementById('drop-error')?.remove();
-}
-
-// Konfirmasi hapus foto
-function konfirmasiHapusFoto() {
-    if (confirm('Yakin ingin menghapus foto profil? Foto akan digantikan dengan inisial nama Anda.')) {
-        document.getElementById('form-hapus-foto').submit();
-    }
-}
+    document.addEventListener('DOMContentLoaded', function () {
+        window.dispatchEvent(new CustomEvent('open-edit-modal'));
+    });
 </script>
-@endpush
+@endif
 
 @endsection

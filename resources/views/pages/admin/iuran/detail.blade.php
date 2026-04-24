@@ -64,7 +64,7 @@
                 <tr class="hover:bg-gray-50 dark:hover:bg-white/[0.02]">
                     <td class="px-6 py-4">
                         <p class="font-medium text-gray-800 dark:text-white/90">
-                            {{ $item->kk->kepalaKeluarga->nama ?? '-' }}
+                            {{ $item->kk->kepalaKeluarga->nama_lengkap ?? '-' }}
                         </p>
                         <p class="text-xs text-gray-400">No. KK: {{ $item->kk->no_kk ?? '-' }}</p>
                     </td>

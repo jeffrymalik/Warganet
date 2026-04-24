@@ -44,10 +44,10 @@ class KartuKeluarga extends Model
     /**
      * Anggota keluarga (selain kepala keluarga)
      */
-    public function anggota(): HasMany
+
+        public function anggota()
     {
-        return $this->hasMany(Warga::class, 'kartu_keluarga_id')
-                    ->where('is_kepala_keluarga', false);
+        return $this->hasMany(\App\Models\Warga::class, 'kartu_keluarga_id');
     }
 
     /**

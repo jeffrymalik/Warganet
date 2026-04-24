@@ -67,15 +67,28 @@
       </button>
       <!-- Hamburger Toggle BTN -->
 
-      <a href="index.html" class="lg:hidden">
-        <img width="70" class="dark:hidden" src="{{asset('/images/logo/logo-icon.png')}}" alt="Logo" />
-        <img
-          width="50"
-          class="hidden dark:block"
-          src="{{asset('/images/logo/logo-icon.png')}}"
-          alt="Logo"
-        />
-      </a>
+
+      @if (auth()->user()->role === 'admin') 
+        <a href="{{route('admin.dashboard')}}" class="lg:hidden">
+          <img width="70" class="dark:hidden" src="{{asset('/images/logo/logo-icon.png')}}" alt="Logo" />
+          <img
+            width="50"
+            class="hidden dark:block"
+            src="{{asset('/images/logo/logo-icon.png')}}"
+            alt="Logo"
+          />
+        </a>
+        @else
+          <a href="{{route('admin.dashboard')}}" class="lg:hidden">
+          <img width="70" class="dark:hidden" src="{{asset('/images/logo/logo-icon.png')}}" alt="Logo" />
+          <img
+            width="50"
+            class="hidden dark:block"
+            src="{{asset('/images/logo/logo-icon.png')}}"
+            alt="Logo"
+          />
+        </a>
+      @endif
 
       <!-- Application nav menu button -->
       <button
@@ -101,7 +114,7 @@
       </button>
       <!-- Application nav menu button -->
 
-      <div class="hidden lg:block">
+      {{-- <div class="hidden lg:block">
         <form>
           <div class="relative">
             <span class="absolute top-1/2 left-4 -translate-y-1/2">
@@ -137,7 +150,7 @@
             </button>
           </div>
         </form>
-      </div>
+      </div> --}}
     </div>
 
     <div
@@ -183,421 +196,126 @@
 
         <!-- Notification Menu Area -->
         <div
-          class="relative"
-          x-data="{ dropdownOpen: false, notifying: true }"
-          @click.outside="dropdownOpen = false"
+            class="relative"
+            x-data="{ dropdownOpen: false }"
+            @click.outside="dropdownOpen = false"
         >
-          <button
-            class="hover:text-dark-900 relative flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
-            @click.prevent="dropdownOpen = ! dropdownOpen; notifying = false"
-          >
-            <span
-              :class="!notifying ? 'hidden' : 'flex'"
-              class="absolute top-0.5 right-0 z-1 h-2 w-2 rounded-full bg-orange-400"
+            {{-- Bell Button --}}
+            <button
+                class="hover:text-dark-900 relative flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+                @click.prevent="dropdownOpen = !dropdownOpen"
             >
-              <span
-                class="absolute -z-1 inline-flex h-full w-full animate-ping rounded-full bg-orange-400 opacity-75"
-              ></span>
-            </span>
-            <svg
-              class="fill-current"
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M10.75 2.29248C10.75 1.87827 10.4143 1.54248 10 1.54248C9.58583 1.54248 9.25004 1.87827 9.25004 2.29248V2.83613C6.08266 3.20733 3.62504 5.9004 3.62504 9.16748V14.4591H3.33337C2.91916 14.4591 2.58337 14.7949 2.58337 15.2091C2.58337 15.6234 2.91916 15.9591 3.33337 15.9591H4.37504H15.625H16.6667C17.0809 15.9591 17.4167 15.6234 17.4167 15.2091C17.4167 14.7949 17.0809 14.4591 16.6667 14.4591H16.375V9.16748C16.375 5.9004 13.9174 3.20733 10.75 2.83613V2.29248ZM14.875 14.4591V9.16748C14.875 6.47509 12.6924 4.29248 10 4.29248C7.30765 4.29248 5.12504 6.47509 5.12504 9.16748V14.4591H14.875ZM8.00004 17.7085C8.00004 18.1228 8.33583 18.4585 8.75004 18.4585H11.25C11.6643 18.4585 12 18.1228 12 17.7085C12 17.2943 11.6643 16.9585 11.25 16.9585H8.75004C8.33583 16.9585 8.00004 17.2943 8.00004 17.7085Z"
-                fill=""
-              />
-            </svg>
-          </button>
+                @if(auth()->user()->unreadNotifications->count() > 0)
+                    <span class="absolute top-0.5 right-0 z-10 h-2 w-2 rounded-full bg-orange-400">
+                        <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-orange-400 opacity-75"></span>
+                    </span>
+                @endif
 
-          <!-- Dropdown Start -->
-          <div
-            x-show="dropdownOpen"
-            class="shadow-theme-lg dark:bg-gray-dark absolute -right-[240px] mt-[17px] flex h-[480px] w-[350px] flex-col rounded-2xl border border-gray-200 bg-white p-3 sm:w-[361px] lg:right-0 dark:border-gray-800"
-          >
-            <div
-              class="mb-3 flex items-center justify-between border-b border-gray-100 pb-3 dark:border-gray-800"
-            >
-              <h5
-                class="text-lg font-semibold text-gray-800 dark:text-white/90"
-              >
-                Notification
-              </h5>
-
-              <button
-                @click="dropdownOpen = false"
-                class="text-gray-500 dark:text-gray-400"
-              >
-                <svg
-                  class="fill-current"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M6.21967 7.28131C5.92678 6.98841 5.92678 6.51354 6.21967 6.22065C6.51256 5.92775 6.98744 5.92775 7.28033 6.22065L11.999 10.9393L16.7176 6.22078C17.0105 5.92789 17.4854 5.92788 17.7782 6.22078C18.0711 6.51367 18.0711 6.98855 17.7782 7.28144L13.0597 12L17.7782 16.7186C18.0711 17.0115 18.0711 17.4863 17.7782 17.7792C17.4854 18.0721 17.0105 18.0721 16.7176 17.7792L11.999 13.0607L7.28033 17.7794C6.98744 18.0722 6.51256 18.0722 6.21967 17.7794C5.92678 17.4865 5.92678 17.0116 6.21967 16.7187L10.9384 12L6.21967 7.28131Z"
-                    fill=""
-                  />
+                <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M10.75 2.29248C10.75 1.87827 10.4143 1.54248 10 1.54248C9.58583 1.54248 9.25004 1.87827 9.25004 2.29248V2.83613C6.08266 3.20733 3.62504 5.9004 3.62504 9.16748V14.4591H3.33337C2.91916 14.4591 2.58337 14.7949 2.58337 15.2091C2.58337 15.6234 2.91916 15.9591 3.33337 15.9591H4.37504H15.625H16.6667C17.0809 15.9591 17.4167 15.6234 17.4167 15.2091C17.4167 14.7949 17.0809 14.4591 16.6667 14.4591H16.375V9.16748C16.375 5.9004 13.9174 3.20733 10.75 2.83613V2.29248ZM14.875 14.4591V9.16748C14.875 6.47509 12.6924 4.29248 10 4.29248C7.30765 4.29248 5.12504 6.47509 5.12504 9.16748V14.4591H14.875ZM8.00004 17.7085C8.00004 18.1228 8.33583 18.4585 8.75004 18.4585H11.25C11.6643 18.4585 12 18.1228 12 17.7085C12 17.2943 11.6643 16.9585 11.25 16.9585H8.75004C8.33583 16.9585 8.00004 17.2943 8.00004 17.7085Z" fill=""/>
                 </svg>
-              </button>
-            </div>
+            </button>
 
-            <ul class="custom-scrollbar flex h-auto flex-col overflow-y-auto">
-              <li>
-                <a
-                  class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
-                  href="#"
-                >
-                  <span
-                    class="relative z-1 block h-10 w-full max-w-10 rounded-full"
-                  >
-                    <img
-                      src="./images/user/user-02.jpg"
-                      alt="User"
-                      class="overflow-hidden rounded-full"
-                    />
-                    <span
-                      class="bg-success-500 absolute right-0 bottom-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900"
-                    ></span>
-                  </span>
-
-                  <span class="block">
-                    <span
-                      class="text-theme-sm mb-1.5 block text-gray-500 dark:text-gray-400"
-                    >
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Terry Franci</span
-                      >
-                      requests permission to change
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Project - Nganter App</span
-                      >
-                    </span>
-
-                    <span
-                      class="text-theme-xs flex items-center gap-2 text-gray-500 dark:text-gray-400"
-                    >
-                      <span>Project</span>
-                      <span class="h-1 w-1 rounded-full bg-gray-400"></span>
-                      <span>5 min ago</span>
-                    </span>
-                  </span>
-                </a>
-              </li>
-
-              <li>
-                <a
-                  class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
-                  href="#"
-                >
-                  <span
-                    class="relative z-1 block h-10 w-full max-w-10 rounded-full"
-                  >
-                    <img
-                      src="./images/user/user-03.jpg"
-                      alt="User"
-                      class="overflow-hidden rounded-full"
-                    />
-                    <span
-                      class="bg-success-500 absolute right-0 bottom-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900"
-                    ></span>
-                  </span>
-
-                  <span class="block">
-                    <span
-                      class="text-theme-sm mb-1.5 block text-gray-500 dark:text-gray-400"
-                    >
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Alena Franci</span
-                      >
-                      requests permission to change
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Project - Nganter App</span
-                      >
-                    </span>
-
-                    <span
-                      class="text-theme-xs flex items-center gap-2 text-gray-500 dark:text-gray-400"
-                    >
-                      <span>Project</span>
-                      <span class="h-1 w-1 rounded-full bg-gray-400"></span>
-                      <span>8 min ago</span>
-                    </span>
-                  </span>
-                </a>
-              </li>
-
-              <li>
-                <a
-                  class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
-                  href="#"
-                >
-                  <span
-                    class="relative z-1 block h-10 w-full max-w-10 rounded-full"
-                  >
-                    <img
-                      src="./images/user/user-04.jpg"
-                      alt="User"
-                      class="overflow-hidden rounded-full"
-                    />
-                    <span
-                      class="bg-success-500 absolute right-0 bottom-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900"
-                    ></span>
-                  </span>
-
-                  <span class="block">
-                    <span
-                      class="text-theme-sm mb-1.5 block text-gray-500 dark:text-gray-400"
-                    >
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Jocelyn Kenter</span
-                      >
-                      requests permission to change
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Project - Nganter App</span
-                      >
-                    </span>
-
-                    <span
-                      class="text-theme-xs flex items-center gap-2 text-gray-500 dark:text-gray-400"
-                    >
-                      <span>Project</span>
-                      <span class="h-1 w-1 rounded-full bg-gray-400"></span>
-                      <span>15 min ago</span>
-                    </span>
-                  </span>
-                </a>
-              </li>
-
-              <li>
-                <a
-                  class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
-                  href="#"
-                >
-                  <span
-                    class="relative z-1 block h-10 w-full max-w-10 rounded-full"
-                  >
-                    <img
-                      src="./images/user/user-05.jpg"
-                      alt="User"
-                      class="overflow-hidden rounded-full"
-                    />
-                    <span
-                      class="bg-error-500 absolute right-0 bottom-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900"
-                    ></span>
-                  </span>
-
-                  <span class="block">
-                    <span
-                      class="text-theme-sm mb-1.5 block text-gray-500 dark:text-gray-400"
-                    >
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Brandon Philips</span
-                      >
-                      requests permission to change
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Project - Nganter App</span
-                      >
-                    </span>
-
-                    <span
-                      class="text-theme-xs flex items-center gap-2 text-gray-500 dark:text-gray-400"
-                    >
-                      <span>Project</span>
-                      <span class="h-1 w-1 rounded-full bg-gray-400"></span>
-                      <span>1 hr ago</span>
-                    </span>
-                  </span>
-                </a>
-              </li>
-
-              <li>
-                <a
-                  class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
-                  href="#"
-                >
-                  <span
-                    class="relative z-1 block h-10 w-full max-w-10 rounded-full"
-                  >
-                    <img
-                      src="./images/user/user-02.jpg"
-                      alt="User"
-                      class="overflow-hidden rounded-full"
-                    />
-                    <span
-                      class="bg-success-500 absolute right-0 bottom-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900"
-                    ></span>
-                  </span>
-
-                  <span class="block">
-                    <span
-                      class="text-theme-sm mb-1.5 block text-gray-500 dark:text-gray-400"
-                    >
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Terry Franci</span
-                      >
-                      requests permission to change
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Project - Nganter App</span
-                      >
-                    </span>
-
-                    <span
-                      class="text-theme-xs flex items-center gap-2 text-gray-500 dark:text-gray-400"
-                    >
-                      <span>Project</span>
-                      <span class="h-1 w-1 rounded-full bg-gray-400"></span>
-                      <span>5 min ago</span>
-                    </span>
-                  </span>
-                </a>
-              </li>
-
-              <li>
-                <a
-                  class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
-                  href="#"
-                >
-                  <span
-                    class="relative z-1 block h-10 w-full max-w-10 rounded-full"
-                  >
-                    <img
-                      src="./images/user/user-03.jpg"
-                      alt="User"
-                      class="overflow-hidden rounded-full"
-                    />
-                    <span
-                      class="bg-success-500 absolute right-0 bottom-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900"
-                    ></span>
-                  </span>
-
-                  <span class="block">
-                    <span
-                      class="text-theme-sm mb-1.5 block text-gray-500 dark:text-gray-400"
-                    >
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Alena Franci</span
-                      >
-                      requests permission to change
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Project - Nganter App</span
-                      >
-                    </span>
-
-                    <span
-                      class="text-theme-xs flex items-center gap-2 text-gray-500 dark:text-gray-400"
-                    >
-                      <span>Project</span>
-                      <span class="h-1 w-1 rounded-full bg-gray-400"></span>
-                      <span>8 min ago</span>
-                    </span>
-                  </span>
-                </a>
-              </li>
-
-              <li>
-                <a
-                  class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
-                  href="#"
-                >
-                  <span
-                    class="relative z-1 block h-10 w-full max-w-10 rounded-full"
-                  >
-                    <img
-                      src="./images/user/user-04.jpg"
-                      alt="User"
-                      class="overflow-hidden rounded-full"
-                    />
-                    <span
-                      class="bg-success-500 absolute right-0 bottom-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900"
-                    ></span>
-                  </span>
-
-                  <span class="block">
-                    <span
-                      class="text-theme-sm mb-1.5 block text-gray-500 dark:text-gray-400"
-                    >
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Jocelyn Kenter</span
-                      >
-                      requests permission to change
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Project - Nganter App</span
-                      >
-                    </span>
-
-                    <span
-                      class="text-theme-xs flex items-center gap-2 text-gray-500 dark:text-gray-400"
-                    >
-                      <span>Project</span>
-                      <span class="h-1 w-1 rounded-full bg-gray-400"></span>
-                      <span>15 min ago</span>
-                    </span>
-                  </span>
-                </a>
-              </li>
-
-              <li>
-                <a
-                  class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
-                  href="#"
-                >
-                  <span
-                    class="relative z-1 block h-10 w-full max-w-10 rounded-full"
-                  >
-                    <img
-                      src="./images/user/user-05.jpg"
-                      alt="User"
-                      class="overflow-hidden rounded-full"
-                    />
-                    <span
-                      class="bg-error-500 absolute right-0 bottom-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900"
-                    ></span>
-                  </span>
-
-                  <span class="block">
-                    <span
-                      class="text-theme-sm mb-1.5 block text-gray-500 dark:text-gray-400"
-                    >
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Brandon Philips</span
-                      >
-                      requests permission to change
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Project - Nganter App</span
-                      >
-                    </span>
-
-                    <span
-                      class="text-theme-xs flex items-center gap-2 text-gray-500 dark:text-gray-400"
-                    >
-                      <span>Project</span>
-                      <span class="h-1 w-1 rounded-full bg-gray-400"></span>
-                      <span>1 hr ago</span>
-                    </span>
-                  </span>
-                </a>
-              </li>
-            </ul>
-
-            <a
-              href="#"
-              class="text-theme-sm shadow-theme-xs mt-3 flex justify-center rounded-lg border border-gray-300 bg-white p-3 font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+            {{-- Dropdown --}}
+            <div
+                x-show="dropdownOpen"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 scale-95"
+                x-transition:enter-end="opacity-100 scale-100"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100 scale-100"
+                x-transition:leave-end="opacity-0 scale-95"
+                class="shadow-theme-lg absolute -right-[240px] mt-[17px] flex h-[480px] w-[350px] flex-col rounded-2xl border border-gray-200 bg-white p-3 sm:w-[361px] lg:right-0 dark:border-gray-800 dark:bg-gray-900"
             >
-              View All Notification
-            </a>
-          </div>
-          <!-- Dropdown End -->
+                {{-- Header --}}
+                <div class="mb-3 flex items-center justify-between border-b border-gray-100 pb-3 dark:border-gray-800">
+                    <h5 class="text-lg font-semibold text-gray-800 dark:text-white/90">Notifikasi</h5>
+
+                    @if(auth()->user()->unreadNotifications->count() > 0)
+                        <form action="{{ route('notifications.markAllRead') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="text-xs text-brand-500 hover:underline">
+                                Tandai semua dibaca
+                            </button>
+                        </form>
+                    @endif
+                </div>
+
+                {{-- List --}}
+                <ul class="custom-scrollbar flex h-auto flex-col overflow-y-auto gap-1">
+                    @forelse(auth()->user()->notifications->take(7) as $notif)
+                        <li>
+                            <a
+                                href="{{ route('notifications.show', $notif->id) }}"
+                                class="flex gap-3 rounded-xl p-2.5 transition-colors hover:bg-gray-100 dark:hover:bg-white/5 {{ $notif->read_at ? 'opacity-60' : '' }}"
+                            >
+                                {{-- Icon --}}
+                                @php
+                                    $icon    = $notif->data['icon'] ?? 'info';
+                                    $iconBg  = match($icon) {
+                                        'warning' => 'bg-warning-50 dark:bg-warning-500/10',
+                                        'error'   => 'bg-error-50 dark:bg-error-500/10',
+                                        'success' => 'bg-success-50 dark:bg-success-500/10',
+                                        default   => 'bg-brand-50 dark:bg-brand-500/10',
+                                    };
+                                    $iconColor = match($icon) {
+                                        'warning' => 'text-warning-500',
+                                        'error'   => 'text-error-500',
+                                        'success' => 'text-success-500',
+                                        default   => 'text-brand-500',
+                                    };
+                                    $iconPath = match($icon) {
+                                        'warning' => 'M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4M12 17h.01',
+                                        'error'   => 'M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zM12 8v4M12 16h.01',
+                                        'success' => 'M22 11.08V12a10 10 0 1 1-5.93-9.14M22 4 12 14.01l-3-3',
+                                        default   => 'M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0',
+                                    };
+                                @endphp
+                                <div class="mt-0.5 shrink-0">
+                                    <div class="flex h-9 w-9 items-center justify-center rounded-full {{ $iconBg }}">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="{{ $iconColor }}">
+                                            <path d="{{ $iconPath }}"/>
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                {{-- Konten --}}
+                                <div class="min-w-0 flex-1">
+                                    <p class="truncate text-sm font-medium text-gray-800 dark:text-white/90">
+                                        {{ $notif->data['judul'] }}
+                                        @if(!$notif->read_at)
+                                            <span class="ml-1 inline-block h-2 w-2 rounded-full bg-brand-500"></span>
+                                        @endif
+                                    </p>
+                                    <p class="mt-0.5 line-clamp-2 text-xs text-gray-500 dark:text-gray-400">
+                                        {{ $notif->data['pesan'] }}
+                                    </p>
+                                    <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">
+                                        {{ $notif->created_at->diffForHumans() }}
+                                    </p>
+                                </div>
+                            </a>
+                        </li>
+                    @empty
+                        <li class="flex flex-col items-center justify-center py-10 text-center">
+                            <div class="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" class="text-gray-400">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M10.75 2.29248C10.75 1.87827 10.4143 1.54248 10 1.54248C9.58583 1.54248 9.25004 1.87827 9.25004 2.29248V2.83613C6.08266 3.20733 3.62504 5.9004 3.62504 9.16748V14.4591H3.33337C2.91916 14.4591 2.58337 14.7949 2.58337 15.2091C2.58337 15.6234 2.91916 15.9591 3.33337 15.9591H16.6667C17.0809 15.9591 17.4167 15.6234 17.4167 15.2091C17.4167 14.7949 17.0809 14.4591 16.6667 14.4591H16.375V9.16748C16.375 5.9004 13.9174 3.20733 10.75 2.83613V2.29248ZM14.875 14.4591V9.16748C14.875 6.47509 12.6924 4.29248 10 4.29248C7.30765 4.29248 5.12504 6.47509 5.12504 9.16748V14.4591H14.875ZM8.00004 17.7085C8.00004 18.1228 8.33583 18.4585 8.75004 18.4585H11.25C11.6643 18.4585 12 18.1228 12 17.7085C12 17.2943 11.6643 16.9585 11.25 16.9585H8.75004C8.33583 16.9585 8.00004 17.2943 8.00004 17.7085Z"/>
+                                </svg>
+                            </div>
+                            <p class="text-sm text-gray-400 dark:text-gray-500">Tidak ada notifikasi</p>
+                        </li>
+                    @endforelse
+                </ul>
+
+                {{-- Footer --}}
+                <a
+                    href="{{ route('notifications.index') }}"
+                    class="text-theme-sm shadow-theme-xs mt-3 flex justify-center rounded-lg border border-gray-300 bg-white p-3 font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+                >
+                    Lihat Semua Notifikasi
+                </a>
+            </div>
         </div>
         <!-- Notification Menu Area -->
       </div>
@@ -613,9 +331,15 @@
           href="#"
           @click.prevent="dropdownOpen = ! dropdownOpen"
         >
+        @if(auth()->user()->foto)
           <span class="mr-3 h-11 w-11 overflow-hidden rounded-full">
-            <img src="./images/user/owner.jpg" alt="User" />
+            <img src="{{ Storage::url(auth()->user()->foto) }}" alt="foto" class="w-full h-full object-cover">
           </span>
+          @else 
+          <span class="mr-3 h-11 w-11 flex items-center justify-center rounded-full bg-gray-200 text-gray-700 font-semibold">
+            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+          </span>
+          @endif
 
           <span class="text-theme-sm mr-1 block font-medium"> {{auth()->user()->name}} </span>
 
@@ -661,7 +385,7 @@
           >
             <li>
               <a
-                href="profile.html"
+                href="{{route('profile')}}"
                 class="group text-theme-sm flex items-center gap-3 rounded-lg px-3 py-2 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
               >
                 <svg

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\IuranWarga;
 use App\Models\IuranTagihan;
-use App\Models\Kk;
+use App\Models\KartuKeluarga;
 use App\Services\MidtransService;
 use Illuminate\Http\Request;
 

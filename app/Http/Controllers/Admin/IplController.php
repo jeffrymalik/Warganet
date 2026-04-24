@@ -59,7 +59,7 @@ class IplController extends Controller
             }
         }
 
-        return back()->with('sukses', "Berhasil generate {$berhasil} tagihan. {$sudahAda} KK sudah punya tagihan bulan ini.");
+        return back()->with('success', "Berhasil generate {$berhasil} tagihan. {$sudahAda} KK sudah punya tagihan bulan ini.");
     }
 
     // Admin tandai lunas manual (bayar cash)
@@ -78,7 +78,7 @@ class IplController extends Controller
             ]
         );
 
-        return back()->with('sukses', 'Tagihan berhasil ditandai lunas.');
+        return back()->with('success', 'Tagihan berhasil ditandai lunas.');
     }
 
     // Riwayat pembayaran

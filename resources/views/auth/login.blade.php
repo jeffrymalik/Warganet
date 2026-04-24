@@ -12,18 +12,31 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login | Sistem Kelola RT</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    {{-- <link rel="stylesheet" href="{{ asset('css/style.css') }}"> --}}
   </head>
-  <body class="bg-gray-50 dark:bg-boxdark-2">
+  <body x-data="{ page: 'ecommerce', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+    x-init="
+         darkMode = JSON.parse(localStorage.getItem('darkMode'));
+         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}">
 
     <div class="flex min-h-screen items-center justify-center">
-      <div class="w-full max-w-md rounded-2xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-boxdark p-8 shadow-lg">
+      <div class="w-full max-w-md rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-8 shadow-lg">
 
         {{-- Logo & Title --}}
         <div class="mb-8 text-center">
+          <img
+          width="120"
+            class="logo-icon mx-auto"
+            src="{{ asset('/images/logo/logo-icon.png') }}"
+            alt="Logo"
+          />
           <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
             Sistem Kelola RT
           </h1>
+          </p>
           <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
             Silakan login untuk melanjutkan
           </p>
@@ -31,8 +44,8 @@
 
         {{-- Error Message --}}
         @if ($errors->any())
-          <div class="mb-4 rounded-lg bg-red-50 dark:bg-red-900/20 p-4">
-            <p class="text-sm text-red-600 dark:text-red-400">
+          <div class="mb-4 rounded-xl border border-error-500 bg-error-50 p-4 dark:border-error-500/30 dark:bg-error-500/15 mb-3">
+            <p class="text-sm text-gray-500 dark:text-gray-400 list-disc pl-5 space-y-1">
               {{ $errors->first() }}
             </p>
           </div>
@@ -46,7 +59,7 @@
           <div class="mb-4">
             <label
               for="email"
-              class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+             class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
             >
               Email
             </label>
@@ -57,7 +70,7 @@
               value="{{ old('email') }}"
               placeholder="contoh@email.com"
               required
-              class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-boxdark-2 px-4 py-3 text-sm text-gray-800 dark:text-white placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+              class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
             />
           </div>
 
@@ -65,7 +78,7 @@
           <div class="mb-6">
             <label
               for="password"
-              class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+              class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
             >
               Password
             </label>
@@ -76,8 +89,8 @@
                 name="password"
                 placeholder="Masukkan password"
                 required
-                class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-boxdark-2 px-4 py-3 text-sm text-gray-800 dark:text-white placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
-              />
+                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+            />
               {{-- Toggle show/hide password --}}
               <button
                 type="button"
@@ -106,6 +119,6 @@
       </div>
     </div>
 
-    <script type="module" src="{{ asset('js/bundle.js') }}"></script>
+    {{-- <script type="module" src="{{ asset('js/bundle.js') }}"></script> --}}
   </body>
 </html>

@@ -9,11 +9,12 @@
   >
     <a href="#" class="flex justify-center w-full">
       <span class="logo" :class="sidebarToggle ? 'hidden' : ''">
-        <img width="150" class="dark:hidden mx-auto" src="{{ asset('/images/logo/logo-dark.png') }}" alt="Logo" />
-        <img width="150" class="hidden dark:block mx-auto" src="{{ asset('/images/logo/logo.png') }}" alt="Logo" />
+        <img width="130" class="dark:hidden mx-auto" src="{{ asset('/images/logo/logo-dark.png') }}" alt="Logo" />
+        <img width="130" class="hidden dark:block mx-auto" src="{{ asset('/images/logo/logo.png') }}" alt="Logo" />
       </span>
 
       <img
+      width="120"
         class="logo-icon mx-auto"
         :class="sidebarToggle ? 'lg:block' : 'hidden'"
         src="{{ asset('/images/logo/logo-icon.png') }}"
@@ -48,15 +49,16 @@
           {{-- MENU ITEM: DASHBOARD --}}
           {{-- ==================== --}}
           <li>
-            <a
-              href="#"
-              class="menu-item group"
-              :class="(selected === 'Dashboard') || (page === 'dashboard') ? 'menu-item-active' : 'menu-item-inactive'"
-              @click.prevent="selected = (selected === 'Dashboard' ? '' : 'Dashboard')"
-            >
+              <a
+                href="{{ auth()->user()->role === 'admin' ? route('admin.dashboard') : route('warga.dashboard') }}"
+                class="menu-item group {{ request()->routeIs('admin.dashboard') || request()->routeIs('warga.dashboard') ? 'menu-item-active' : 'menu-item-inactive' }}"
+              >
               {{-- Icon Dashboard --}}
               <svg
-                :class="(selected === 'Dashboard') || (page === 'dashboard') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+                :class="(selected === 'Dashboard') 
+                || (page === 'dashboard') 
+                || {{ request()->routeIs('admin.dashboard') || request()->routeIs('warga.dashboard') ? 'true' : 'false' }} 
+              ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
                 width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
               >
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 3.25C4.25736 3.25 3.25 4.25736 3.25 5.5V8.99998C3.25 10.2426 4.25736 11.25 5.5 11.25H9C10.2426 11.25 11.25 10.2426 11.25 8.99998V5.5C11.25 4.25736 10.2426 3.25 9 3.25H5.5ZM4.75 5.5C4.75 5.08579 5.08579 4.75 5.5 4.75H9C9.41421 4.75 9.75 5.08579 9.75 5.5V8.99998C9.75 9.41419 9.41421 9.74998 9 9.74998H5.5C5.08579 9.74998 4.75 9.41419 4.75 8.99998V5.5ZM5.5 12.75C4.25736 12.75 3.25 13.7574 3.25 15V18.5C3.25 19.7426 4.25736 20.75 5.5 20.75H9C10.2426 20.75 11.25 19.7427 11.25 18.5V15C11.25 13.7574 10.2426 12.75 9 12.75H5.5ZM4.75 15C4.75 14.5858 5.08579 14.25 5.5 14.25H9C9.41421 14.25 9.75 14.5858 9.75 15V18.5C9.75 18.9142 9.41421 19.25 9 19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5V15ZM12.75 5.5C12.75 4.25736 13.7574 3.25 15 3.25H18.5C19.7426 3.25 20.75 4.25736 20.75 5.5V8.99998C20.75 10.2426 19.7426 11.25 18.5 11.25H15C13.7574 11.25 12.75 10.2426 12.75 8.99998V5.5ZM15 4.75C14.5858 4.75 14.25 5.08579 14.25 5.5V8.99998C14.25 9.41419 14.5858 9.74998 15 9.74998H18.5C18.9142 9.74998 19.25 9.41419 19.25 8.99998V5.5C19.25 5.08579 18.9142 4.75 18.5 4.75H15ZM15 12.75C13.7574 12.75 12.75 13.7574 12.75 15V18.5C12.75 19.7426 13.7574 20.75 15 20.75H18.5C19.7426 20.75 20.75 19.7427 20.75 18.5V15C20.75 13.7574 19.7426 12.75 18.5 12.75H15ZM14.25 15C14.25 14.5858 14.5858 14.25 15 14.25H18.5C18.9142 14.25 19.25 14.5858 19.25 15V18.5C19.25 18.9142 18.9142 19.25 18.5 19.25H15C14.5858 19.25 14.25 18.9142 14.25 18.5V15Z" fill="" />
@@ -122,12 +124,12 @@
             <div class="overflow-hidden transform translate" :class="(selected === 'Jadwal') ? 'block' : 'hidden'">
               <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'" class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
                 <li>
-                  <a href="{{route('admin.jadwal.index')}}" class="menu-dropdown-item group" :class="page === 'jadwal' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                  <a href="{{route('admin.jadwal.index')}}" class="menu-dropdown-item group {{ request()->routeIs('admin.jadwal.index') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
                     Jadwal Kegiatan
                   </a>
                 </li>
                 <li>
-                  <a href="{{route('admin.pengumuman.index')}}" class="menu-dropdown-item group" :class="page === 'pengumuman' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                  <a href="{{route('admin.pengumuman.index')}}" class="menu-dropdown-item group {{ request()->routeIs('admin.pengumuman.index') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
                     Pengumuman
                   </a>
                 </li>
@@ -171,14 +173,14 @@
                 @if (auth()->user()->role === 'admin')
                   {{-- Admin: lihat semua keluhan --}}
                   <li>
-                    <a href="{{route('admin.keluhan.index')}}" class="menu-dropdown-item group" :class="page === 'keluhanList' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                    <a href="{{route('admin.keluhan.index')}}" class="menu-dropdown-item group {{ request()->routeIs('admin.keluhan.index') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
                       Semua Keluhan
                     </a>
                   </li>
                 @else
                   {{-- Warga: hanya keluhan milik sendiri --}}
                   <li>
-                    <a href="{{route('warga.keluhan.index')}}" class="menu-dropdown-item group" :class="page === 'keluhanSaya' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                    <a href="{{route('warga.keluhan.index')}}" class="menu-dropdown-item group {{ request()->routeIs('warga.keluhan.index') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
                       Keluhan Saya
                     </a>
                   </li>
@@ -223,14 +225,14 @@
                 @if (auth()->user()->role === 'admin')
                   {{-- Admin: kelola semua permohonan surat --}}
                   <li>
-                    <a href="{{route('admin.surat.index')}}" class="menu-dropdown-item group" :class="page === 'suratKelola' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                    <a href="{{route('admin.surat.index')}}" class="menu-dropdown-item group {{ request()->routeIs('admin.surat.index') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
                       Kelola Permohonan
                     </a>
                   </li>
                 @else
                   {{-- Warga: ajukan & lihat status surat --}}
                   <li>
-                    <a href="{{route('warga.surat.index')}}" class="menu-dropdown-item group" :class="page === 'suratAjukan' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                    <a href="{{route('warga.surat.index')}}" class="menu-dropdown-item group {{ request()->routeIs('warga.surat.index') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
                       Ajukan Surat
                     </a>
                   </li>
@@ -296,18 +298,18 @@
 
                 @if (auth()->user()->role === 'admin')
                   <li>
-                    <a href="{{route('admin.ipl.index')}}" class="menu-dropdown-item group" :class="page === 'iplKelola' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                    <a href="{{route('admin.ipl.index')}}" class="menu-dropdown-item group {{ request()->routeIs('admin.ipl.index') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
                       Kelola IPL
                     </a>
                   </li>
                   <li>
-                    <a href="{{route('admin.ipl.riwayat')}}" class="menu-dropdown-item group" :class="page === 'iplRiwayat' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                    <a href="{{route('admin.ipl.riwayat')}}" class="menu-dropdown-item group {{ request()->routeIs('admin.ipl.riwayat') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
                       Riwayat Pembayaran
                     </a>
                   </li>
                 @else
                   <li>
-                    <a href="{{route('warga.tagihan.index')}}" class="menu-dropdown-item group" :class="page === 'iplTagihan' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                    <a href="{{route('warga.tagihan.index')}}" class="menu-dropdown-item group {{ request()->routeIs('warga.tagihan.index') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
                       Tagihan Saya
                     </a>
                   </li>
@@ -326,55 +328,55 @@
           {{-- ================== --}}
           {{-- MENU ITEM: IURAN   --}}
           {{-- ================== --}}
-          <li>
-            <a
-              href="#"
-              class="menu-item group"
-              :class="(selected === 'Iuran') || (page === 'iuranTagihan' || page === 'iuranKelola' || page === 'iuranRiwayat') ? 'menu-item-active' : 'menu-item-inactive'"
-              @click.prevent="selected = (selected === 'Iuran' ? '' : 'Iuran')"
-            >
-              {{-- Icon Wallet --}}
-              <svg
-                :class="(selected === 'Iuran') || (page === 'iuranTagihan' || page === 'iuranKelola' || page === 'iuranRiwayat') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
-                width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+          @if (auth()->user()->role === 'admin')
+            <li>
+              <a
+                href="#"
+                class="menu-item group"
+                :class="(selected === 'Iuran') || (page === 'iuranTagihan' || page === 'iuranKelola' || page === 'iuranRiwayat') ? 'menu-item-active' : 'menu-item-inactive'"
+                @click.prevent="selected = (selected === 'Iuran' ? '' : 'Iuran')"
               >
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M2.75 7C2.75 5.48122 3.98122 4.25 5.5 4.25H18.5C20.0188 4.25 21.25 5.48122 21.25 7V17C21.25 18.5188 20.0188 19.75 18.5 19.75H5.5C3.98122 19.75 2.75 18.5188 2.75 17V7ZM5.5 5.75C4.80964 5.75 4.25 6.30964 4.25 7V8.25H19.75V7C19.75 6.30964 19.1904 5.75 18.5 5.75H5.5ZM19.75 9.75H4.25V17C4.25 17.6904 4.80964 18.25 5.5 18.25H18.5C19.1904 18.25 19.75 17.6904 19.75 17V9.75ZM14.75 13.5C14.75 12.8096 15.3096 12.25 16 12.25H17C17.6904 12.25 18.25 12.8096 18.25 13.5C18.25 14.1904 17.6904 14.75 17 14.75H16C15.3096 14.75 14.75 14.1904 14.75 13.5Z" fill="" />
-              </svg>
-              <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">Iuran Warga</span>
-              <svg
-                class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
-                :class="[(selected === 'Iuran') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '']"
-                width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </a>
+                {{-- Icon Wallet --}}
+                <svg
+                  :class="(selected === 'Iuran') || (page === 'iuranTagihan' || page === 'iuranKelola' || page === 'iuranRiwayat') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+                  width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M2.75 7C2.75 5.48122 3.98122 4.25 5.5 4.25H18.5C20.0188 4.25 21.25 5.48122 21.25 7V17C21.25 18.5188 20.0188 19.75 18.5 19.75H5.5C3.98122 19.75 2.75 18.5188 2.75 17V7ZM5.5 5.75C4.80964 5.75 4.25 6.30964 4.25 7V8.25H19.75V7C19.75 6.30964 19.1904 5.75 18.5 5.75H5.5ZM19.75 9.75H4.25V17C4.25 17.6904 4.80964 18.25 5.5 18.25H18.5C19.1904 18.25 19.75 17.6904 19.75 17V9.75ZM14.75 13.5C14.75 12.8096 15.3096 12.25 16 12.25H17C17.6904 12.25 18.25 12.8096 18.25 13.5C18.25 14.1904 17.6904 14.75 17 14.75H16C15.3096 14.75 14.75 14.1904 14.75 13.5Z" fill="" />
+                </svg>
+                <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">Iuran Warga</span>
+                <svg
+                  class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
+                  :class="[(selected === 'Iuran') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '']"
+                  width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </a>
 
-            <div class="overflow-hidden transform translate" :class="(selected === 'Iuran') ? 'block' : 'hidden'">
-              <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'" class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
+              <div class="overflow-hidden transform translate" :class="(selected === 'Iuran') ? 'block' : 'hidden'">
+                <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'" class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
+                    <li>
+                      <a href="{{route('admin.iuran.index')}}" class="menu-dropdown-item group {{ request()->routeIs('admin.iuran.index') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
+                        Kelola Iuran
+                      </a>
+                    </li>
+                    <li>
+                    {{-- <li>
+                      <a href="#" class="menu-dropdown-item group" :class="page === 'iuranTagihan' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                        Tagihan Iuran Saya
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" class="menu-dropdown-item group" :class="page === 'iuranRiwayat' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                        Riwayat Bayar
+                      </a>
+                    </li> --}}
+                  
 
-                @if (auth()->user()->role === 'admin')
-                  <li>
-                    <a href="{{route('admin.iuran.index')}}" class="menu-dropdown-item group" :class="page === 'iuranKelola' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
-                      Kelola Iuran
-                    </a>
-                  </li>
-                  <li>
-                  {{-- <li>
-                    <a href="#" class="menu-dropdown-item group" :class="page === 'iuranTagihan' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
-                      Tagihan Iuran Saya
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="menu-dropdown-item group" :class="page === 'iuranRiwayat' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
-                      Riwayat Bayar
-                    </a>
-                  </li> --}}
-                @endif
-
-              </ul>
-            </div>
-          </li>
+                </ul>
+              </div>
+            </li>
+            @endif
           {{-- END IURAN --}}
 
         </ul>
@@ -497,9 +499,8 @@
           {{-- ========================= --}}
           <li>
             <a
-              href="#"
-              class="menu-item group"
-              :class="(selected === 'Profil') && (page === 'profil') ? 'menu-item-active' : 'menu-item-inactive'"
+              href="{{route('profile')}}"
+              class="menu-dropdown-item group {{ request()->routeIs('profile') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}"
               @click="selected = (selected === 'Profil' ? '' : 'Profil')"
             >
               {{-- Icon Profile --}}

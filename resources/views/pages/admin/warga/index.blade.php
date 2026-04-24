@@ -44,7 +44,7 @@
             </div>
         </div>
     </div>
-<div class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] mt-3">
+<div class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] mt-3 mb-6">
 
     {{-- Header --}}
     <div class="flex flex-col gap-2 px-4 pt-4 pb-4 sm:px-6 sm:flex-row sm:items-center sm:justify-between">
@@ -80,7 +80,7 @@
                     x-show="open"
                     @click.outside="open = false"
                     x-transition
-                    class="absolute right-0 mt-2 w-64 rounded-xl border border-gray-200 bg-white p-4 shadow-lg z-50 dark:border-gray-700 dark:bg-gray-800"
+                    class="absolute left-0 mt-2 w-64 rounded-xl border border-gray-200 bg-white p-4 shadow-lg z-50 dark:border-gray-700 dark:bg-gray-800"
                 >
                     <form method="GET" action="{{ route('admin.warga.index') }}">
                         @if(request()->filled('search'))

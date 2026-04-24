@@ -24,6 +24,6 @@ class IuranTagihan extends Model
 
     public function kk()
     {
-        return $this->belongsTo(Kk::class, 'kk_id');
+        return $this->belongsTo(KartuKeluarga::class, 'kk_id');
     }
 }

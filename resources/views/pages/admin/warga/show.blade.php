@@ -143,23 +143,23 @@
             <table class="w-full text-sm">
                 <thead>
                     <tr class="border-b border-gray-100 dark:border-gray-800">
-                        <th class="pb-3 text-left text-xs font-medium text-gray-400">NIK</th>
-                        <th class="pb-3 text-left text-xs font-medium text-gray-400">Nama</th>
-                        <th class="pb-3 text-left text-xs font-medium text-gray-400">Jenis Kelamin</th>
-                        <th class="pb-3 text-left text-xs font-medium text-gray-400">Agama</th>
-                        <th class="pb-3 text-left text-xs font-medium text-gray-400">Status</th>
-                        <th class="pb-3 text-left text-xs font-medium text-gray-400">Aksi</th>
+                        <th class="pb-3 px-3 text-left text-xs font-medium text-gray-400">NIK</th>
+                        <th class="pb-3 px-3 text-left text-xs font-medium text-gray-400">Nama</th>
+                        <th class="pb-3 px-3 text-left text-xs font-medium text-gray-400">Jenis Kelamin</th>
+                        <th class="pb-3 px-3 text-left text-xs font-medium text-gray-400">Agama</th>
+                        <th class="pb-3 px-3 text-left text-xs font-medium text-gray-400">Status</th>
+                        <th class="pb-3 px-3 text-left text-xs font-medium text-gray-400">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                     @foreach($anggota as $a)
                     <tr>
-                        <td class="py-3 text-gray-600 dark:text-gray-400">{{ $a->nik }}</td>
-                        <td class="py-3 font-medium text-gray-800 dark:text-white">{{ $a->nama_lengkap }}</td>
-                        <td class="py-3 text-gray-600 dark:text-gray-400">{{ $a->label_jenis_kelamin }}</td>
-                        <td class="py-3 text-gray-600 dark:text-gray-400 capitalize">{{ $a->agama }}</td>
-                        <td class="py-3 text-gray-600 dark:text-gray-400 capitalize">{{ $a->status_warga }}</td>
-                        <td class="py-3">
+                        <td class="py-3 px-3 text-gray-600 dark:text-gray-400">{{ $a->nik }}</td>
+                        <td class="py-3 px-3 font-medium text-gray-800 dark:text-white">{{ $a->nama_lengkap }}</td>
+                        <td class="py-3 px-3 text-gray-600 dark:text-gray-400">{{ $a->label_jenis_kelamin }}</td>
+                        <td class="py-3 px-3 text-gray-600 dark:text-gray-400 capitalize">{{ $a->agama }}</td>
+                        <td class="py-3 px-3 text-gray-600 dark:text-gray-400 capitalize">{{ $a->status_warga }}</td>
+                        <td class="py-3 px-3">
                             <div class="flex items-center gap-2">
                                 {{-- Detail --}}
                                 <button
@@ -199,7 +199,7 @@
     </div>
 
     {{-- TOMBOL KEMBALI --}}
-    <div class="flex justify-start">
+    <div class="flex justify-start mb-6">
         
         <a    href="{{ route('admin.warga.index') }}"
             class="flex items-center gap-2 rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-blue-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-white/[0.05]"
@@ -211,7 +211,7 @@
 </div>
 
     {{-- POPUP DETAIL ANGGOTA --}}
-    <div id="modal-detail" class="fixed inset-0 z-50 hidden items-center justify-center p-4" role="dialog">
+    <div id="modal-detail" class="fixed inset-0 z-99999 hidden items-center justify-center p-4" role="dialog">
     
         {{-- Backdrop --}}
         <div id="modal-backdrop" onclick="tutupDetail()" class="absolute inset-0 bg-black/60"></div>

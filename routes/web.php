@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileControlller;
 use App\Http\Controllers\WargaController;
 use App\Http\Controllers\Admin\JadwalKegiatanController;
@@ -114,17 +115,20 @@ Route::middleware(['auth', 'role:warga'])->prefix('warga')->name('warga.')->grou
     Route::post('/ipl/{tagihan}/bayar', [IplController::class, 'bayar'])->name('ipl.bayar');
     Route::post('/iuran/tagihan/{tagihan}/bayar', [IuranWargaController::class, 'bayar'])->name('iuran.bayar');
 
+    // routes/web.php
+Route::get('/jadwal', [App\Http\Controllers\WargaJadwalController::class, 'index'])->name('jadwal.index');
+Route::get('/jadwal/ambil', [App\Http\Controllers\WargaJadwalController::class, 'ambil'])->name('jadwal.ambil');
+
 
 });
 Route::middleware('auth')->group(function () {
-    Route::get('/profile',          [ProfileControlller::class, 'show'])->name('profile');
-    Route::get('/profile/edit',     [ProfileControlller::class, 'edit'])->name('profile.edit');
- 
-    Route::patch('/profile/foto',     [ProfileControlller::class, 'updateFoto'])->name('profile.update.foto');
-    Route::delete('/profile/foto',    [ProfileControlller::class, 'hapusFoto'])->name('profile.hapus.foto');
-    Route::patch('/profile/akun',     [ProfileControlller::class, 'updateAkun'])->name('profile.update.akun');
-    Route::patch('/profile/password', [ProfileControlller::class, 'updatePassword'])->name('profile.update.password');
-    Route::patch('/profile/warga',    [ProfileControlller::class, 'updateWarga'])->name('profile.update.warga');
+    Route::get('/profile',          [ProfileControlller::class, 'index'])->name('profile');
+    Route::get('/keluarga-saya', [ProfileControlller::class, 'keluarga'])->name('warga.keluarga');
+    Route::post('/profile', [ProfileControlller::class, 'update'])->name('profile.update');
+
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/{id}', [NotificationController::class, 'show'])->name('notifications.show');
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllRead'])->name('notifications.markAllRead');
 });
 
 Route::post('/midtrans/webhook', [MidtransWebhookController::class, 'handle']);
