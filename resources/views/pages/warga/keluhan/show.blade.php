@@ -59,7 +59,7 @@
                     {{-- Pesan Admin (kiri) --}}
                     <div class="flex justify-start">
                         <div class="max-w-[75%]">
-                            <p class="text-xs text-gray-400 mb-1">Admin · {{ $pesan->created_at->format('d M Y, H:i') }}</p>
+                            <p class="text-xs text-gray-400 mb-1">Admin ·{{ $pesan->created_at->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }}</p>
                             <div class="rounded-2xl rounded-tl-sm bg-gray-100 dark:bg-white/[0.05] px-4 py-3">
                                 <p class="text-sm text-gray-800 dark:text-white">{{ $pesan->pesan }}</p>
                             </div>
@@ -69,7 +69,7 @@
                     {{-- Pesan Warga (kanan) --}}
                     <div class="flex justify-end">
                         <div class="max-w-[75%]">
-                            <p class="text-xs text-gray-400 text-right mb-1">Saya · {{ $pesan->created_at->format('d M Y, H:i') }}</p>
+                            <p class="text-xs text-gray-400 text-right mb-1">Saya · {{ $pesan->created_at->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }}</p>
                             <div class="rounded-2xl rounded-tr-sm bg-brand-500 px-4 py-3">
                                 <p class="text-sm text-white">{{ $pesan->pesan }}</p>
                             </div>
