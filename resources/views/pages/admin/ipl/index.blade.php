@@ -128,7 +128,7 @@
                         <svg class="mx-auto mb-3 h-10 w-10 text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
-                        Belum ada tagihan. Klik "Generate Tagihan" untuk membuat.
+                        Belum ada tagihan. Klik "Tambahkan Tagihan" untuk membuat.
                     </td>
                 </tr>
                 @endforelse
@@ -154,7 +154,7 @@
             </svg>
         </button>
 
-        <h5 class="mb-1 text-xl font-semibold text-gray-800 dark:text-white/90">Generate Tagihan IPL</h5>
+        <h5 class="mb-1 text-xl font-semibold text-gray-800 dark:text-white/90">Tambahkan Tagihan IPL</h5>
         <p class="mb-6 text-sm text-gray-500 dark:text-gray-400">Buat tagihan IPL untuk semua KK sekaligus</p>
 
         <form action="{{ route('admin.ipl.generate') }}" method="POST">
@@ -201,7 +201,7 @@
                 </button>
                 <button type="submit"
                     class="rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600">
-                    Generate Sekarang
+                    Tambahkan Sekarang
                 </button>
             </div>
         </form>

@@ -9,8 +9,10 @@ class IplTagihanObserver
 {
     public function created(IplTagihan $tagihan): void
     {
-        // Notif ke kepala keluarga
-        $kepala = $tagihan->kartuKeluarga->kepalaKeluarga;
+        $tagihan->load('kk.kepalaKeluarga.user');
+
+        $kepala = $tagihan->kk?->kepalaKeluarga;
+
         if ($kepala?->user) {
             $kepala->user->notify(new TagihanIplNotification($tagihan));
         }

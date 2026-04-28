@@ -47,7 +47,7 @@
                         Rp {{ number_format($item->nominal, 0, ',', '.') }}
                     </td>
                     <td class="px-6 py-4 text-gray-500 dark:text-gray-400">
-                        {{ $item->due_date?->format('d M Y') ?? '-' }}
+                        {{ $item->due_date?->setTimezone('Asia/Jakarta')->format('d M Y, H:i') ?? '-' }}
                     </td>
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-2">
