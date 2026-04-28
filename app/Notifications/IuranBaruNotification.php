@@ -19,7 +19,7 @@ class IuranBaruNotification extends Notification
         return [
             'judul' => 'Iuran Baru',
             'pesan' => "Iuran \"{$this->iuran->nama}\" telah diterbitkan.",
-            'url'   => route('warga.iuran.index'),
+            'url'   => route('admin.iuran.index'),
             'tipe'  => 'iuran',
             'icon'  => 'warning',
         ];

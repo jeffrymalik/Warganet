@@ -9,9 +9,12 @@ class IuranTagihanObserver
 {
     public function created(IuranTagihan $tagihan): void
     {
-        $kepala = $tagihan->kartuKeluarga->kepalaKeluarga;
-        if ($kepala?->user) {
-            $kepala->user->notify(new IuranBaruNotification($tagihan->iuranWarga));
+        $tagihan->loadMissing('kk.kepalaKeluarga.user', 'iuran');
+
+        $kepala = $tagihan->kk?->kepalaKeluarga;
+
+        if ($kepala?->user && $tagihan->iuran) {
+            $kepala->user->notify(new IuranBaruNotification($tagihan->iuran));
         }
     }
 }

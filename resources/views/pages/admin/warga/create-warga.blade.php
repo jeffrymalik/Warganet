@@ -33,47 +33,42 @@
         <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
             <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-1">Kartu Keluarga</h3>
             <p class="text-sm text-gray-400 mb-4">Pilih kartu keluarga tempat warga ini akan didaftarkan.</p>
-
-            <div x-data="{ selected: '{{ old('kartu_keluarga_id') }}' }">
-                {{-- Search + Dropdown --}}
-                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">No. KK</label>
-                <select
-                    name="kartu_keluarga_id"
-                    x-model="selected"
-                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pr-11 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
+        
+            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">No. KK</label>
+        
+            <select id="select-kk" name="kartu_keluarga_id">
+                <option value="">-- Pilih No. KK --</option>
+                @foreach($kkList as $kk)
+                    <option value="{{ $kk->id }}" {{ old('kartu_keluarga_id') == $kk->id ? 'selected' : '' }}>
+                        {{ $kk->no_kk }} — {{ $kk->kepalaKeluarga?->nama_lengkap ?? 'Tanpa Kepala KK' }}
+                    </option>
+                @endforeach
+            </select>
+        
+            {{-- Info KK: semua di-render, ditampilkan via JS --}}
+            @foreach($kkList as $kk)
+                <div
+                    id="info-kk-{{ $kk->id }}"
+                    class="kk-info hidden mt-4 grid grid-cols-2 gap-4 rounded-xl border border-gray-100 bg-gray-50 p-4 dark:border-gray-700 dark:bg-white/[0.02]"
                 >
-                    <option value="">-- Pilih No. KK --</option>
-                    @foreach($kkList as $kk)
-                        <option value="{{ $kk->id }}" {{ old('kartu_keluarga_id') == $kk->id ? 'selected' : '' }}>
-                            {{ $kk->no_kk }} — {{ $kk->kepalaKeluarga?->nama_lengkap ?? 'Tanpa Kepala KK' }}
-                        </option>
-                    @endforeach
-                </select>
-
-                {{-- Info KK setelah dipilih --}}
-                <template x-if="selected">
-                    @foreach($kkList as $kk)
-                    <div x-show="selected == '{{ $kk->id }}'" class="mt-4 grid grid-cols-2 gap-4 rounded-xl border border-gray-100 bg-gray-50 p-4 dark:border-gray-700 dark:bg-white/[0.02]">
-                        <div>
-                            <p class="text-xs text-gray-400 mb-1">No. KK</p>
-                            <p class="text-sm font-medium text-gray-800 dark:text-white">{{ $kk->no_kk }}</p>
-                        </div>
-                        <div>
-                            <p class="text-xs text-gray-400 mb-1">Kepala Keluarga</p>
-                            <p class="text-sm font-medium text-gray-800 dark:text-white">{{ $kk->kepalaKeluarga?->nama_lengkap ?? '-' }}</p>
-                        </div>
-                        <div>
-                            <p class="text-xs text-gray-400 mb-1">Alamat</p>
-                            <p class="text-sm font-medium text-gray-800 dark:text-white">{{ $kk->alamat ?? '-' }}</p>
-                        </div>
-                        <div>
-                            <p class="text-xs text-gray-400 mb-1">No. Rumah</p>
-                            <p class="text-sm font-medium text-gray-800 dark:text-white">{{ $kk->no_rumah ?? '-' }}</p>
-                        </div>
+                    <div>
+                        <p class="text-xs text-gray-400 mb-1">No. KK</p>
+                        <p class="text-sm font-medium text-gray-800 dark:text-white">{{ $kk->no_kk }}</p>
                     </div>
-                    @endforeach
-                </template>
-            </div>
+                    <div>
+                        <p class="text-xs text-gray-400 mb-1">Kepala Keluarga</p>
+                        <p class="text-sm font-medium text-gray-800 dark:text-white">{{ $kk->kepalaKeluarga?->nama_lengkap ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400 mb-1">Alamat</p>
+                        <p class="text-sm font-medium text-gray-800 dark:text-white">{{ $kk->alamat ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400 mb-1">No. Rumah</p>
+                        <p class="text-sm font-medium text-gray-800 dark:text-white">{{ $kk->no_rumah ?? '-' }}</p>
+                    </div>
+                </div>
+            @endforeach
         </div>
 
         {{-- BOX 2 — DATA WARGA --}}
@@ -214,3 +209,87 @@
     </form>
 </div>
 @endsection
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const choices = new Choices('#select-kk', {
+        searchEnabled: true,
+        searchPlaceholderValue: 'Cari No. KK...',
+        noResultsText: 'Tidak ditemukan',
+        itemSelectText: '',
+        shouldSort: false,
+    });
+
+    document.getElementById('select-kk').addEventListener('change', function () {
+        const value = this.value;
+        document.querySelectorAll('.kk-info').forEach(el => el.classList.add('hidden'));
+        if (value) {
+            const target = document.getElementById('info-kk-' + value);
+            if (target) target.classList.remove('hidden');
+        }
+    });
+
+    const oldValue = '{{ old('kartu_keluarga_id') }}';
+    if (oldValue) {
+        const target = document.getElementById('info-kk-' + oldValue);
+        if (target) target.classList.remove('hidden');
+    }
+});
+</script>
+@endpush
+
+@push('styles')
+<style>
+.choices { width: 100%; }
+.choices__inner {
+    min-height: 44px;
+    padding: 8px 16px;
+    border: 1px solid rgb(209 213 219) !important;
+    border-radius: 0.5rem !important;
+    background: white !important;
+    font-size: 0.875rem;
+    color: rgb(31 41 55);
+}
+.choices.is-focused .choices__inner {
+    border-color: rgb(99 102 241) !important;
+    box-shadow: 0 0 0 3px rgb(99 102 241 / 0.1) !important;
+}
+.choices__list--dropdown {
+    border: 1px solid rgb(229 231 235) !important;
+    border-radius: 0.5rem !important;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
+    z-index: 9999 !important;
+}
+.choices__list--dropdown .choices__item {
+    font-size: 0.875rem;
+    padding: 8px 16px;
+    color: rgb(55 65 81);
+}
+.choices__list--dropdown .choices__item--highlighted {
+    background-color: rgb(239 246 255) !important;
+    color: rgb(37 99 235) !important;
+}
+.choices__input {
+    font-size: 0.875rem !important;
+    background: transparent !important;
+}
+.choices__placeholder { color: rgb(156 163 175); }
+
+/* Dark mode */
+.dark .choices__inner {
+    background: rgb(17 24 39) !important;
+    border-color: rgb(55 65 81) !important;
+    color: rgba(255 255 255 / 0.9);
+}
+.dark .choices__list--dropdown {
+    background: rgb(17 24 39) !important;
+    border-color: rgb(55 65 81) !important;
+}
+.dark .choices__list--dropdown .choices__item { color: rgb(209 213 219); }
+.dark .choices__list--dropdown .choices__item--highlighted {
+    background: rgba(255 255 255 / 0.05) !important;
+    color: rgb(147 197 253) !important;
+}
+.dark .choices__input { color: rgba(255 255 255 / 0.9) !important; }
+</style>
+@endpush

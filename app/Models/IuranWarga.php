@@ -37,4 +37,9 @@ class IuranWarga extends Model
     {
         return $this->tagihan()->where('status', '!=', 'lunas')->count();
     }
+
+        public function kk()
+    {
+        return $this->belongsTo(KartuKeluarga::class, 'kk_id');
+    }
 }
