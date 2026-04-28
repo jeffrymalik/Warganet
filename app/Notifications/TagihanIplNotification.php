@@ -16,12 +16,19 @@ class TagihanIplNotification extends Notification
 
     public function toDatabase($notifiable): array
     {
-        $bulan = \Carbon\Carbon::create()->month($this->tagihan->bulan)->translatedFormat('F');
+        $namaBulan = [
+            1 => 'Januari', 2 => 'Februari', 3 => 'Maret',
+            4 => 'April', 5 => 'Mei', 6 => 'Juni',
+            7 => 'Juli', 8 => 'Agustus', 9 => 'September',
+            10 => 'Oktober', 11 => 'November', 12 => 'Desember',
+        ];
+
+        $bulan = $namaBulan[$this->tagihan->bulan] ?? '-';
 
         return [
             'judul' => 'Tagihan IPL Baru',
             'pesan' => "Tagihan IPL bulan {$bulan} {$this->tagihan->tahun} telah diterbitkan.",
-            'url'   => route('admin.ipl.index'),
+            'url'   => route('warga.ipl.index'),
             'tipe'  => 'ipl',
             'icon'  => 'error',
         ];
