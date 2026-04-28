@@ -29,9 +29,9 @@ class NotificationController extends Controller
 
         $url = match(true) {
             $tipe === 'ipl'     && $role === 'admin'  => route('admin.ipl.index'),
-            $tipe === 'ipl'     && $role === 'warga'  => route('warga.ipl.index'),
+            $tipe === 'ipl'     && $role === 'warga'  => route('warga.tagihan.index'),
             $tipe === 'iuran'   && $role === 'admin'  => route('admin.iuran.index'),
-            $tipe === 'iuran'   && $role === 'warga'  => route('warga.iuran.index'),
+            $tipe === 'iuran'   && $role === 'warga'  => route('warga.tagihan.index'),
             $tipe === 'keluhan' && $role === 'admin'  => route('admin.keluhan.show', $ref_id),
             $tipe === 'keluhan' && $role === 'warga'  => route('warga.keluhan.show', $ref_id),
             $tipe === 'surat'   && $role === 'admin'  => route('admin.surat.show', $ref_id),
