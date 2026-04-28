@@ -23,7 +23,23 @@ class NotificationController extends Controller
         $notification = Auth::user()->notifications()->findOrFail($id);
         $notification->markAsRead();
 
-        return redirect($notification->data['url']);
+        $tipe   = $notification->data['tipe'] ?? null;
+        $ref_id = $notification->data['ref_id'] ?? null;
+        $role   = Auth::user()->role; // atau hasRole() kalau pakai Spatie
+
+        $url = match(true) {
+            $tipe === 'ipl'     && $role === 'admin'  => route('admin.ipl.index'),
+            $tipe === 'ipl'     && $role === 'warga'  => route('warga.ipl.index'),
+            $tipe === 'iuran'   && $role === 'admin'  => route('admin.iuran.index'),
+            $tipe === 'iuran'   && $role === 'warga'  => route('warga.iuran.index'),
+            $tipe === 'keluhan' && $role === 'admin'  => route('admin.keluhan.show', $ref_id),
+            $tipe === 'keluhan' && $role === 'warga'  => route('warga.keluhan.show', $ref_id),
+            $tipe === 'surat'   && $role === 'admin'  => route('admin.surat.show', $ref_id),
+            $tipe === 'surat'   && $role === 'warga'  => route('warga.surat.show', $ref_id),
+            default => route('notifications.index'),
+        };
+
+        return redirect($url);
     }
 
     public function markAllRead()

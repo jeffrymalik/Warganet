@@ -28,7 +28,7 @@ class TagihanIplNotification extends Notification
         return [
             'judul' => 'Tagihan IPL Baru',
             'pesan' => "Tagihan IPL bulan {$bulan} {$this->tagihan->tahun} telah diterbitkan.",
-            'url'   => route('admin.ipl.index'),
+            'ref_id' => $this->tagihan->id,
             'tipe'  => 'ipl',
             'icon'  => 'error',
         ];

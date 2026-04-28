@@ -26,7 +26,7 @@ class StatusSuratNotification extends Notification
         return [
             'judul' => 'Status Surat Diperbarui',
             'pesan' => "Permohonan surat ".str_replace('_', ' ', $this->surat->jenis_surat)." {$label}.",
-            'url'   => route('warga.surat.show', $this->surat->id),
+            'ref_id' => $this->surat->id,
             'tipe'  => 'surat',
             'icon'  => 'info',
         ];

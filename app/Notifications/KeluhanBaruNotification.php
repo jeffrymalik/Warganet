@@ -19,7 +19,7 @@ class KeluhanBaruNotification extends Notification
         return [
             'judul'   => 'Keluhan Baru',
             'pesan'   => "Keluhan baru dari {$this->keluhan->warga->nama_lengkap}: {$this->keluhan->judul}",
-            'url'     => route('admin.keluhan.show', $this->keluhan->id),
+            'ref_id' => $this->keluhan->id,
             'tipe'    => 'keluhan',
             'icon'    => 'warning',
         ];
