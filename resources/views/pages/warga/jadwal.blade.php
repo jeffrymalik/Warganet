@@ -33,19 +33,35 @@ document.addEventListener('DOMContentLoaded', function () {
         selectable: false,
         eventClick(info) {
             const ev = info.event;
+
+            const formatTanggal = (dateStr) => {
+                const date = new Date(dateStr + 'T00:00:00');
+                return date.toLocaleDateString('id-ID', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric'
+                });
+            };
+
             const mulai = ev.startStr.slice(0, 10);
-            let selesai = mulai;
+            let selesai = null;
+
             if (ev.end) {
-                const endBefore = new Date(ev.end);
-                endBefore.setDate(endBefore.getDate() - 1);
-                selesai = endBefore.toISOString().slice(0, 10);
+                const endStr = ev.end.toISOString().slice(0, 10);
+                if (endStr !== mulai) {
+                    selesai = endStr;
+                }
             }
+
+            const tanggalHtml = selesai
+                ? `📅 ${formatTanggal(mulai)} — ${formatTanggal(selesai)}`
+                : `📅 ${formatTanggal(mulai)}`;
 
             Swal.fire({
                 title: ev.title,
                 html: `
                     <p class="text-sm text-gray-500">${ev.extendedProps.deskripsi ?? 'Tidak ada deskripsi'}</p>
-                    <p class="text-xs text-gray-400 mt-2">📅 ${mulai}${selesai !== mulai ? ' — ' + selesai : ''}</p>
+                    <p class="text-xs text-gray-400 mt-2">${tanggalHtml}</p>
                 `,
                 confirmButtonText: 'Tutup',
                 confirmButtonColor: '#465fff',
