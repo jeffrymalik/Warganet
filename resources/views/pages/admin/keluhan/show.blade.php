@@ -27,7 +27,7 @@
                 <div class="flex items-start justify-between mb-4">
                     <div>
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-white">{{ $keluhan->judul }}</h3>
-                        <p class="text-xs text-gray-400 mt-1">{{ $keluhan->created_at->format('d M Y, H:i') }}</p>
+                        <p class="text-xs text-gray-400 mt-1">{{ $keluhan->created_at->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }}</p>
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ $keluhan->badge_kategori }}">
