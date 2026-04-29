@@ -25,17 +25,22 @@ class NotificationController extends Controller
 
         $tipe   = $notification->data['tipe'] ?? null;
         $ref_id = $notification->data['ref_id'] ?? null;
-        $role   = Auth::user()->role; // atau hasRole() kalau pakai Spatie
+        $role   = Auth::user()->role;
+
+        // Safety: jika tipe butuh ref_id tapi null, langsung fallback
+        if (in_array($tipe, ['keluhan', 'surat']) && !$ref_id) {
+            return redirect()->route('notifications.index');
+        }
 
         $url = match(true) {
             $tipe === 'ipl'     && $role === 'admin'  => route('admin.ipl.index'),
             $tipe === 'ipl'     && $role === 'warga'  => route('warga.tagihan.index'),
             $tipe === 'iuran'   && $role === 'admin'  => route('admin.iuran.index'),
             $tipe === 'iuran'   && $role === 'warga'  => route('warga.tagihan.index'),
-            $tipe === 'keluhan' && $role === 'admin'  => route('admin.keluhan.show', $ref_id),
-            $tipe === 'keluhan' && $role === 'warga'  => route('warga.keluhan.show', $ref_id),
-            $tipe === 'surat'   && $role === 'admin'  => route('admin.surat.show', $ref_id),
-            $tipe === 'surat'   && $role === 'warga'  => route('warga.surat.show', $ref_id),
+            $tipe === 'keluhan' && $role === 'admin'  => route('admin.keluhan.show', ['keluhan' => $ref_id]),
+            $tipe === 'keluhan' && $role === 'warga'  => route('warga.keluhan.show', ['keluhan' => $ref_id]),
+            $tipe === 'surat'   && $role === 'admin'  => route('admin.surat.show', ['permohonanSurat' => $ref_id]),
+            $tipe === 'surat'   && $role === 'warga'  => route('warga.surat.show', ['permohonanSurat' => $ref_id]),
             default => route('notifications.index'),
         };
 

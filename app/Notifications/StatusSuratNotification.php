@@ -16,19 +16,19 @@ class StatusSuratNotification extends Notification
 
     public function toDatabase($notifiable): array
     {
-        $label = match($this->surat->status) {
+        $label = match($this->keluhan->status) {
             'diproses' => 'sedang diproses',
             'selesai'  => 'telah selesai',
             'ditolak'  => 'ditolak',
-            default    => $this->surat->status,
+            default    => $this->keluhan->status,
         };
 
         return [
-            'judul' => 'Status Surat Diperbarui',
-            'pesan' => "Permohonan surat ".str_replace('_', ' ', $this->surat->jenis_surat)." {$label}.",
-            'ref_id' => $this->surat->id,
-            'tipe'  => 'surat',
-            'icon'  => 'info',
+            'judul'  => 'Status Keluhan Diperbarui',
+            'pesan'  => "Keluhan \"{$this->keluhan->judul}\" {$label}.",
+            'ref_id' => $this->keluhan->id, // ← tambah ini
+            'tipe'   => 'keluhan',
+            'icon'   => 'info',
         ];
     }
 }

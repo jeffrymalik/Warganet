@@ -17,11 +17,11 @@ class SuratBaruNotification extends Notification
     public function toDatabase($notifiable): array
     {
         return [
-            'judul' => 'Permohonan Surat Baru',
-            'pesan' => "Permohonan surat ".str_replace('_', ' ', $this->surat->jenis_surat)." dari {$this->surat->warga->nama_lengkap}.",
-            'ref_id'   => route('admin.surat.show', $this->surat->id),
-            'tipe'  => 'surat',
-            'icon'  => 'info',
+            'judul'  => 'Permohonan Surat Baru',
+            'pesan'  => "Permohonan surat ".str_replace('_', ' ', $this->surat->jenis_surat)." dari {$this->surat->warga->nama_lengkap}.",
+            'ref_id' => $this->surat->id, // ← tambah ini
+            'tipe'   => 'surat',
+            'icon'   => 'info',
         ];
     }
 }
