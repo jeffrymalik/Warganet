@@ -19,7 +19,7 @@ class SuratBaruNotification extends Notification
         return [
             'judul' => 'Permohonan Surat Baru',
             'pesan' => "Permohonan surat ".str_replace('_', ' ', $this->surat->jenis_surat)." dari {$this->surat->warga->nama_lengkap}.",
-            'url'   => route('admin.surat.show', $this->surat->id),
+            'ref_id'   => route('admin.surat.show', $this->surat->id),
             'tipe'  => 'surat',
             'icon'  => 'info',
         ];

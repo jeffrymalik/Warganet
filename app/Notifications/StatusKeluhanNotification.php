@@ -26,7 +26,7 @@ class StatusKeluhanNotification extends Notification
         return [
             'judul' => 'Status Keluhan Diperbarui',
             'pesan' => "Keluhan \"{$this->keluhan->judul}\" {$label}.",
-            'url'   => route('warga.keluhan.show', $this->keluhan->id),
+            'ref_id'   => route('warga.keluhan.show', $this->keluhan->id),
             'tipe'  => 'keluhan',
             'icon'  => 'info',
         ];
